@@ -1,8 +1,7 @@
 package emulator.src;
 
-import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +118,24 @@ public class SrcModel extends AbstractTableModel {
 
 	public SrcModel(String fileName, short[] memory) {
 		this.memory = memory;
+		FileInputStream in;
+		try {
+			in = new FileInputStream(fileName);
+			
+			byte[] buffer = new byte[65536*2];
+			in.read(buffer);
+			
+			parse(buffer);
+			disassm();
+			
+			in.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		/*
 		BufferedReader in;
 		try {
 			in = new BufferedReader(new FileReader(fileName));
@@ -132,6 +149,18 @@ public class SrcModel extends AbstractTableModel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
+	}
+	
+	private void parse(byte[] buffer) {
+		short t; 
+		for (int i = 0; i < this.memory.length; i++) {
+			t = buffer[i*2];
+			t <<= 8;
+			t += buffer[i * 2 + 1];
+			this.memory[i] = t; 
+		}
+		
 	}
 
 	public void disassm() {
@@ -422,6 +451,7 @@ public class SrcModel extends AbstractTableModel {
 		for (int i = 0; i < words.length; i++) {
 			String w = words[i];
 			memory[addr++] = (short) Integer.parseInt(w, 16);
+System.out.println((addr-1) + ": " + w + " == " + memory[addr-1]);
 		}
 	}
 
