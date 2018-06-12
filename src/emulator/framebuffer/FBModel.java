@@ -54,5 +54,6 @@ public class FBModel extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		fireTableDataChanged();
+		fireTableCellUpdated(row, col);
 	}
 }

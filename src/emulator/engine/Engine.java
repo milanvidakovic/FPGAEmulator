@@ -33,6 +33,7 @@ public class Engine {
 
 	public void reset() {
 		this.ctx.reset();
+		this.fbViewer.reset();
 		running = false;
 		halted = false;
 		refreshUI(null);

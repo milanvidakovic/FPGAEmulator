@@ -153,12 +153,19 @@ public class SrcModel extends AbstractTableModel {
 	}
 	
 	private void parse(byte[] buffer) {
-		short t; 
+		int t, t1, t2; 
 		for (int i = 0; i < this.memory.length; i++) {
-			t = buffer[i*2];
-			t <<= 8;
-			t += buffer[i * 2 + 1];
-			this.memory[i] = t; 
+			t1 = buffer[i*2];
+			if (t1 < 0) {
+				t1 = 256 + t1;
+			}
+			t = t1 << 8;
+			t2 = buffer[i * 2 + 1];
+			if (t2 < 0 ) {
+				t2 = 256 + t2;
+			}
+			t += t2;
+			this.memory[i] = (short)t; 
 		}
 		
 	}

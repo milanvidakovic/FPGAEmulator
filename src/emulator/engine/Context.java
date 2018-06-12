@@ -44,6 +44,9 @@ public class Context {
 		sp.val = 0;
 		h.val = 0;
 		f.val = 0;
+		for (int i = 0; i < this.memory.length; i++) {
+			this.memory[i] = 0;
+		}
 		if (this.engine != null && this.engine.main.memViewer != null) {
 			engine.main.memViewer.display.setText("                ");
 			engine.main.sfViewer.display.setText("                ");

@@ -42,5 +42,9 @@ public class FBViewer extends JFrame {
 		}
 	}
 
+	public void reset() {
+		memMdl.fireTableDataChanged();
+	}
+
 
 }
