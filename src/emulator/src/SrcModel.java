@@ -78,6 +78,7 @@ import emulator.src.load.LD_REG_MXX;
 import emulator.src.mov.IN_REG_XX;
 import emulator.src.mov.MOV_REGX_REGY;
 import emulator.src.mov.MOV_REG_XX;
+import emulator.src.mov.OUT_XX_REG;
 import emulator.src.muldiv.DIV_REGX_MREGY;
 import emulator.src.muldiv.DIV_REGX_MREGY_XX;
 import emulator.src.muldiv.DIV_REGX_REGY;
@@ -225,6 +226,8 @@ public class SrcModel extends AbstractTableModel {
 				return new MOV_REG_XX(memory, addr, src, dest);
 			case 2:
 				return new IN_REG_XX(memory, addr, src, dest);
+			case 3:
+				return new OUT_XX_REG(memory, addr, src, dest);
 			}
 		}
 		case 2: {
