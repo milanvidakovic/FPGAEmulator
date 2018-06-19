@@ -20,17 +20,19 @@ public class Context {
 	public Register sp = new Register("SP", this);
 	public Register h = new Register("H", this);
 	public Register f = new Register("F", this);
-	
+
+	// received uart byte
+	public byte uart;
+
 	public short[] memory = new short[65536];
-	
-	
+
 	public SrcModel mdl;
 	public Engine engine;
-	
+
 	public Context() {
 		this.mdl = new SrcModel(this.memory);
 	}
-	
+
 	public void reset() {
 		r0.val = 0;
 		r1.val = 0;
@@ -44,27 +46,37 @@ public class Context {
 		sp.val = 0;
 		h.val = 0;
 		f.val = 0;
-		for (int i = 0; i < this.memory.length; i++) {
-			this.memory[i] = 0;
-		}
+		/*
+		 * for (int i = 0; i < this.memory.length; i++) { this.memory[i] = 0; }
+		 */
 		if (this.engine != null && this.engine.main.memViewer != null) {
 			engine.main.memViewer.display.setText("                ");
 			engine.main.sfViewer.display.setText("                ");
 		}
 	}
-	
+
 	public Register getReg(int reg) {
 		switch (reg) {
-		case 0: return r0;
-		case 1: return r1;
-		case 2: return r2;
-		case 3: return r3;
-		case 4: return r4;
-		case 5: return r5;
-		case 6: return r6;
-		case 7: return r7;
-		case 8: return sp;
-		case 9: return h;
+		case 0:
+			return r0;
+		case 1:
+			return r1;
+		case 2:
+			return r2;
+		case 3:
+			return r3;
+		case 4:
+			return r4;
+		case 5:
+			return r5;
+		case 6:
+			return r6;
+		case 7:
+			return r7;
+		case 8:
+			return sp;
+		case 9:
+			return h;
 		}
 		return null;
 	}
@@ -72,5 +84,15 @@ public class Context {
 	public void load(String fileName) {
 		memory = new short[65536];
 		this.mdl = new SrcModel(fileName, memory);
+	}
+
+	public short fromPort(short port) {
+		switch (port) {
+		case 64: {
+			// UART byte
+			return uart;
+		}
+		}
+		return 0;
 	}
 }

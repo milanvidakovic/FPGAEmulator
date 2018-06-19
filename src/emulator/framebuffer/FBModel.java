@@ -3,6 +3,7 @@ package emulator.framebuffer;
 import javax.swing.table.AbstractTableModel;
 
 import emulator.engine.Context;
+import emulator.engine.Engine;
 
 public class FBModel extends AbstractTableModel {
 	private static final long serialVersionUID = 305334635501584898L;
@@ -31,8 +32,9 @@ public class FBModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		int addr = 2400 + row*80 + col;
-		return String.format("%c", ctx.memory[addr]);
+		int addr = Engine.VIDEO_OFFS + row*80 + col;
+		char c = (char) (ctx.memory[addr] & 0xff);
+		return String.format("%c", c);
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public class HALT extends Instruction {
 	
 	@Override
 	public void exec(Context ctx) {
-		ctx.engine.halt();
-		ctx.pc.val++;
+		//ctx.engine.halt();
+		//ctx.pc.val++;
 	}
 }

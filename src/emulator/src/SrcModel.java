@@ -1,7 +1,9 @@
 package emulator.src;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +75,7 @@ import emulator.src.jmp.JZ_XX;
 import emulator.src.load.LD_REGX_MREGY;
 import emulator.src.load.LD_REGX_MREGY_XX;
 import emulator.src.load.LD_REG_MXX;
+import emulator.src.mov.IN_REG_XX;
 import emulator.src.mov.MOV_REGX_REGY;
 import emulator.src.mov.MOV_REG_XX;
 import emulator.src.muldiv.DIV_REGX_MREGY;
@@ -118,56 +121,67 @@ public class SrcModel extends AbstractTableModel {
 
 	public SrcModel(String fileName, short[] memory) {
 		this.memory = memory;
-		FileInputStream in;
-		try {
-			in = new FileInputStream(fileName);
-			
-			byte[] buffer = new byte[65536*2];
-			in.read(buffer);
-			
-			parse(buffer);
-			disassm();
-			
-			in.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (fileName.endsWith(".bin")) {
+			FileInputStream in;
+			try {
+				in = new FileInputStream(fileName);
+
+				byte[] buffer = new byte[65536 * 2];
+				in.read(buffer);
+
+				parse(buffer);
+				disassm();
+
+				in.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			BufferedReader in;
+			try {
+				in = new BufferedReader(new FileReader(fileName));
+				// in.readLine(); // preskočimo prvi red
+				String s = in.readLine();
+				in.close();
+				parse(s);
+				disassm();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
-		/*
-		BufferedReader in;
-		try {
-			in = new BufferedReader(new FileReader(fileName));
-			//in.readLine(); // preskočimo prvi red
-			String s = in.readLine();
-			in.close();
-			parse(s);
-			disassm();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
+
 	}
-	
+
 	private void parse(byte[] buffer) {
-		int t, t1, t2; 
+		int t, t1, t2;
 		for (int i = 0; i < this.memory.length; i++) {
-			t1 = buffer[i*2];
+			t1 = buffer[i * 2];
 			if (t1 < 0) {
 				t1 = 256 + t1;
 			}
 			t = t1 << 8;
 			t2 = buffer[i * 2 + 1];
-			if (t2 < 0 ) {
+			if (t2 < 0) {
 				t2 = 256 + t2;
 			}
 			t += t2;
-			this.memory[i] = (short)t; 
+			this.memory[i] = (short) t;
 		}
-		
+
+	}
+
+	private void parse(String s) {
+		String[] words = s.split(" ");
+		short addr = 0;
+		for (int i = 0; i < words.length; i++) {
+			String w = words[i];
+			memory[addr++] = (short) Integer.parseInt(w, 16);
+			System.out.println((addr - 1) + ": " + w + " == " + memory[addr - 1]);
+		}
 	}
 
 	public void disassm() {
@@ -186,7 +200,7 @@ public class SrcModel extends AbstractTableModel {
 		}
 	}
 
-	private Instruction getInstruction(short[] memory, int addr) {
+	public Instruction getInstruction(short[] memory, int addr) {
 		int ir = (int) memory[addr++];
 		int group = (ir >> 4) & 0xf;
 		int src = (ir >> 12) & 0xf;
@@ -209,6 +223,8 @@ public class SrcModel extends AbstractTableModel {
 				return new MOV_REGX_REGY(memory, addr, src, dest);
 			case 1:
 				return new MOV_REG_XX(memory, addr, src, dest);
+			case 2:
+				return new IN_REG_XX(memory, addr, src, dest);
 			}
 		}
 		case 2: {
@@ -450,16 +466,6 @@ public class SrcModel extends AbstractTableModel {
 		}
 		}
 		return new Instruction(memory, addr, 0, 0);
-	}
-
-	private void parse(String s) {
-		String[] words = s.split(" ");
-		short addr = 0;
-		for (int i = 0; i < words.length; i++) {
-			String w = words[i];
-			memory[addr++] = (short) Integer.parseInt(w, 16);
-System.out.println((addr-1) + ": " + w + " == " + memory[addr-1]);
-		}
 	}
 
 	@Override

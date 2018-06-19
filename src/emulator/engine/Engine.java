@@ -21,6 +21,11 @@ public class Engine {
 	private MemViewer sfViewer;
 	private FBViewer fbViewer;
 	private boolean halted;
+	
+	public static short IRQ1_ADDR = 8;
+	public static boolean irq1 = false;
+	
+	public static int VIDEO_OFFS = 2400;
 
 	public Engine(Context ctx, Main main) {
 		this.ctx = ctx;
@@ -71,6 +76,9 @@ public class Engine {
 					if (halted) {
 						break;
 					}
+					if (Engine.irq1) {
+						prepareIrq();
+					}
 					Instruction i = ctx.mdl.addr_instr[ctx.pc.val];
 					if (i.breakPoint) {
 						stop();
@@ -112,8 +120,32 @@ public class Engine {
 		worker.execute();
 	}
 
+	
+
+	private void prepareIrq() {
+		// Push flags
+		ctx.memory[ctx.sp.val] = ctx.f.val;
+		ctx.sp.val++;
+		// Push PC
+		ctx.memory[ctx.sp.val] = ctx.pc.val;
+		ctx.sp.val++;
+		// Jump to the IRQ1 handler
+		ctx.pc.val = Engine.IRQ1_ADDR;
+		Engine.irq1 = false;
+		
+		if (ctx.mdl.addr_instr[Engine.IRQ1_ADDR].assembler.equals("nop")) {
+			Instruction instr = ctx.mdl.getInstruction(ctx.memory, Engine.IRQ1_ADDR);
+			instr.setContent();
+			ctx.mdl.lines.set(Engine.IRQ1_ADDR, instr);
+			instr.tableLine = Engine.IRQ1_ADDR;
+			ctx.mdl.addr_instr[Engine.IRQ1_ADDR] = instr;
+		}
+	}
 	public void stepInto() throws NotImplementedException {
 		if (!halted) {
+			if (Engine.irq1) {
+				prepareIrq();
+			}
 			Instruction i = ctx.mdl.addr_instr[ctx.pc.val];
 			i.exec(ctx);
 			refreshUI(i);

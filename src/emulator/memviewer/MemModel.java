@@ -89,5 +89,6 @@ public class MemModel extends AbstractTableModel {
 		grid[row][col + 1] = s;
 		System.out.println("CHANGED MEMORY LOCATION CONTENT at addr: " + String.format("0x%04x", ((row * 4) + (col))) + ", to: " + String.format("0x%04x", (s & 0x0000ffff)) + ", row: " + String.format("0x%04x", row*4) + ", col: " + col);
 		fireTableCellUpdated(row, row+1);
+		fireTableDataChanged();
 	}
 }
