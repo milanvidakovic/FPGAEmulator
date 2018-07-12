@@ -16,7 +16,7 @@ public class JZ_XX extends Instruction {
 		if ((ctx.f.val & 1) == 1) {
 			ctx.pc.val = this.argument;
 		} else {
-			ctx.pc.val +=2;
+			ctx.pc.val += 4;
 		}
 	}
 }

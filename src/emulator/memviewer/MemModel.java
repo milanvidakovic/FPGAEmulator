@@ -3,7 +3,6 @@ package emulator.memviewer;
 import javax.swing.table.AbstractTableModel;
 
 import emulator.engine.Context;
-import emulator.src.Instruction;
 
 public class MemModel extends AbstractTableModel {
 	private static final long serialVersionUID = 305334635501584898L;
@@ -20,7 +19,7 @@ public class MemModel extends AbstractTableModel {
 		for (int i = 0; i < (65536/4); i++) {
 			for (int j = 0; j < 5; j++) {
 				if (j == 0) {
-					grid[i][j] = (short)addr;
+					grid[i][j] = (short)(addr * 2);
 				} else {
 					grid[i][j] = ctx.memory[addr];
 					addr++;
@@ -73,21 +72,21 @@ public class MemModel extends AbstractTableModel {
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		short s;
+		/*
 		if (value instanceof String) {
 			col--;
 			s = Short.parseShort(value.toString(), 16);
-			ctx.memory[row * 4 + col] = s;
+			ctx.memory[row * 8 + col] = s;
 			ctx.mdl.reset();
 			ctx.mdl.disassm();
 			ctx.mdl.fireTableDataChanged();
 			Instruction i = ctx.mdl.addr_instr[ctx.pc.val];
 			ctx.engine.main.tblSrc.setRowSelectionInterval(i.tableLine, i.tableLine);
 			ctx.engine.main.tblSrc.scrollRectToVisible(ctx.engine.main.tblSrc.getCellRect(i.tableLine, 0, true));
-		} else {
+		} else*/ {
 			s = (short)value;
 		}
 		grid[row][col + 1] = s;
-		System.out.println("CHANGED MEMORY LOCATION CONTENT at addr: " + String.format("0x%04x", ((row * 4) + (col))) + ", to: " + String.format("0x%04x", (s & 0x0000ffff)) + ", row: " + String.format("0x%04x", row*4) + ", col: " + col);
 		fireTableCellUpdated(row, row+1);
 		fireTableDataChanged();
 	}

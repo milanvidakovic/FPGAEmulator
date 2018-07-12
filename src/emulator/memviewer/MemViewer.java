@@ -29,7 +29,7 @@ public class MemViewer extends JFrame {
 		if (catName.equals("MemViewer")) {
 			setTitle("Memory");
 		} else {
-			setTitle("Stack frame");
+			setTitle("Memory write");
 		}
 		memMdl = new MemModel(ctx);
 		tblMem = new JTable(memMdl);
@@ -51,19 +51,10 @@ public class MemViewer extends JFrame {
 	}
 
 	public void updateCell(int addr, short content) {
-		int row = addr / 4;
-		int col = addr % 4;
+		int row = addr / 8;
+		int col = (addr/2) % 4;
+		System.out.println("CHANGED MEMORY LOCATION CONTENT at addr: " + String.format("0x%04x", addr) + ", to: " + String.format("0x%04x", content));
 		memMdl.setValueAt(content, row, col);
-//		if (addr >= 2400) {
-//			display.setText(setChar(display.getText(), addr - 2400, content));
-//		}
 	}
-
-//	private String setChar(String text, int i, short content) {
-//		String ret = text.substring(0, i);
-//		ret += String.format("%c", content);
-//		ret += text.substring(i + 1);
-//		return ret;
-//	}
 
 }

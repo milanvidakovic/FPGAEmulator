@@ -32,8 +32,8 @@ public class FBModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		int addr = Engine.VIDEO_OFFS + row*80 + col;
-		char c = (char) (ctx.memory[addr] & 0xff);
+		int addr = Engine.VIDEO_OFFS + row*160 + col*2;
+		char c = (char) (ctx.memory[addr / 2] & 0xff);
 		return String.format("%c", c);
 	}
 

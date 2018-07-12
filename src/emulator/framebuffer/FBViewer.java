@@ -47,10 +47,13 @@ System.out.println("UART received: " + ctx.uart);
 	}
 
 	public void updateCell(int addr, short content) {
-		if (addr >= Engine.VIDEO_OFFS && addr <= (Engine.VIDEO_OFFS + 80 * 60)) {
-			int row = (addr) / 80;
-			int col = (addr) % 80;
-			memMdl.setValueAt(content, row, col);
+		if (addr >= Engine.VIDEO_OFFS && addr <= (Engine.VIDEO_OFFS + 160 * 60)) {
+			int row = (addr) / 160;
+			if ((addr & 1) == 0) {
+				int fixed_addr = addr & 0xfffffffe;
+				int col = fixed_addr % 80;
+				memMdl.setValueAt(content, row, col);
+			}
 		}
 	}
 

@@ -10,59 +10,52 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import emulator.src.addsub.ADD_REGX_MREGY;
-import emulator.src.addsub.ADD_REGX_MREGY_XX;
-import emulator.src.addsub.ADD_REGX_REGY;
-import emulator.src.addsub.ADD_REG_MXX;
-import emulator.src.addsub.ADD_REG_XX;
-import emulator.src.addsub.SUB_REGX_MREGY;
-import emulator.src.addsub.SUB_REGX_MREGY_XX;
-import emulator.src.addsub.SUB_REGX_REGY;
-import emulator.src.addsub.SUB_REG_MXX;
-import emulator.src.addsub.SUB_REG_XX;
-import emulator.src.andorxor.AND_REGX_MREGY;
-import emulator.src.andorxor.AND_REGX_MREGY_XX;
-import emulator.src.andorxor.AND_REGX_REGY;
-import emulator.src.andorxor.AND_REG_MXX;
-import emulator.src.andorxor.AND_REG_XX;
-import emulator.src.andorxor.OR_REGX_MREGY;
-import emulator.src.andorxor.OR_REGX_MREGY_XX;
-import emulator.src.andorxor.OR_REGX_REGY;
-import emulator.src.andorxor.OR_REG_MXX;
-import emulator.src.andorxor.OR_REG_XX;
-import emulator.src.andorxor.XOR_REGX_MREGY;
-import emulator.src.andorxor.XOR_REGX_MREGY_XX;
-import emulator.src.andorxor.XOR_REGX_REGY;
-import emulator.src.andorxor.XOR_REG_MXX;
-import emulator.src.andorxor.XOR_REG_XX;
-import emulator.src.callret.CALLC_XX;
-import emulator.src.callret.CALLNC_XX;
-import emulator.src.callret.CALLNO_XX;
-import emulator.src.callret.CALLNP_XX;
-import emulator.src.callret.CALLNZ_XX;
-import emulator.src.callret.CALLO_XX;
-import emulator.src.callret.CALLP_XX;
-import emulator.src.callret.CALLZ_XX;
-import emulator.src.callret.CALL_XX;
-import emulator.src.callret.IRET;
-import emulator.src.callret.RET;
-import emulator.src.cmp.CMP_REGX_MREGY;
-import emulator.src.cmp.CMP_REGX_MREGY_XX;
-import emulator.src.cmp.CMP_REGX_REGY;
-import emulator.src.cmp.CMP_REG_MXX;
-import emulator.src.cmp.CMP_REG_XX;
-import emulator.src.incdecneg.DEC_MREG;
-import emulator.src.incdecneg.DEC_MREG_XX;
-import emulator.src.incdecneg.DEC_MXX;
-import emulator.src.incdecneg.DEC_REG;
-import emulator.src.incdecneg.INC_MREG;
-import emulator.src.incdecneg.INC_MREG_XX;
-import emulator.src.incdecneg.INC_MXX;
-import emulator.src.incdecneg.INC_REG;
-import emulator.src.incdecneg.NEG_MREG;
-import emulator.src.incdecneg.NEG_MREG_XX;
-import emulator.src.incdecneg.NEG_MXX;
-import emulator.src.incdecneg.NEG_REG;
+import emulator.src.alu.ALU_B_REGX_MREGY;
+import emulator.src.alu.ALU_B_REGX_MREGY_XX;
+import emulator.src.alu.ALU_B_REG_MXX;
+import emulator.src.alu.ALU_REGX_MREGY;
+import emulator.src.alu.ALU_REGX_MREGY_XX;
+import emulator.src.alu.ALU_REGX_REGY;
+import emulator.src.alu.ALU_REG_MXX;
+import emulator.src.alu.ALU_REG_XX;
+import emulator.src.call.CALLC_XX;
+import emulator.src.call.CALLNC_XX;
+import emulator.src.call.CALLNO_XX;
+import emulator.src.call.CALLNP_XX;
+import emulator.src.call.CALLNZ_XX;
+import emulator.src.call.CALLO_XX;
+import emulator.src.call.CALLP_XX;
+import emulator.src.call.CALLZ_XX;
+import emulator.src.call.CALL_XX;
+import emulator.src.cmpneg.CMP_B_REGX_MREGY;
+import emulator.src.cmpneg.CMP_B_REGX_MREGY_XX;
+import emulator.src.cmpneg.CMP_B_REG_MXX;
+import emulator.src.cmpneg.CMP_REGX_MREGY;
+import emulator.src.cmpneg.CMP_REGX_MREGY_XX;
+import emulator.src.cmpneg.CMP_REGX_REGY;
+import emulator.src.cmpneg.CMP_REG_MXX;
+import emulator.src.cmpneg.CMP_REG_XX;
+import emulator.src.cmpneg.NEG_B_MREG;
+import emulator.src.cmpneg.NEG_B_MREG_XX;
+import emulator.src.cmpneg.NEG_B_MXX;
+import emulator.src.cmpneg.NEG_MREG;
+import emulator.src.cmpneg.NEG_MREG_XX;
+import emulator.src.cmpneg.NEG_MXX;
+import emulator.src.cmpneg.NEG_REG;
+import emulator.src.incdec.DEC_B_MREG;
+import emulator.src.incdec.DEC_B_MREG_XX;
+import emulator.src.incdec.DEC_B_MXX;
+import emulator.src.incdec.DEC_MREG;
+import emulator.src.incdec.DEC_MREG_XX;
+import emulator.src.incdec.DEC_MXX;
+import emulator.src.incdec.DEC_REG;
+import emulator.src.incdec.INC_B_MREG;
+import emulator.src.incdec.INC_B_MREG_XX;
+import emulator.src.incdec.INC_B_MXX;
+import emulator.src.incdec.INC_MREG;
+import emulator.src.incdec.INC_MREG_XX;
+import emulator.src.incdec.INC_MXX;
+import emulator.src.incdec.INC_REG;
 import emulator.src.jmp.JC_XX;
 import emulator.src.jmp.JMP_XX;
 import emulator.src.jmp.JNC_XX;
@@ -72,41 +65,29 @@ import emulator.src.jmp.JNZ_XX;
 import emulator.src.jmp.JO_XX;
 import emulator.src.jmp.JP_XX;
 import emulator.src.jmp.JZ_XX;
-import emulator.src.load.LD_REGX_MREGY;
-import emulator.src.load.LD_REGX_MREGY_XX;
-import emulator.src.load.LD_REG_MXX;
-import emulator.src.mov.IN_REG_XX;
-import emulator.src.mov.MOV_REGX_REGY;
-import emulator.src.mov.MOV_REG_XX;
-import emulator.src.mov.OUT_XX_REG;
-import emulator.src.muldiv.DIV_REGX_MREGY;
-import emulator.src.muldiv.DIV_REGX_MREGY_XX;
-import emulator.src.muldiv.DIV_REGX_REGY;
-import emulator.src.muldiv.DIV_REG_MXX;
-import emulator.src.muldiv.DIV_REG_XX;
-import emulator.src.muldiv.MUL_REGX_MREGY;
-import emulator.src.muldiv.MUL_REGX_MREGY_XX;
-import emulator.src.muldiv.MUL_REGX_REGY;
-import emulator.src.muldiv.MUL_REG_MXX;
-import emulator.src.muldiv.MUL_REG_XX;
-import emulator.src.nophalt.HALT;
-import emulator.src.nophalt.NOP;
-import emulator.src.pushpop.POP_REG;
-import emulator.src.pushpop.PUSH_REG;
-import emulator.src.pushpop.PUSH_XX;
-import emulator.src.shift.SHL_REGX_MREGY;
-import emulator.src.shift.SHL_REGX_MREGY_XX;
-import emulator.src.shift.SHL_REGX_REGY;
-import emulator.src.shift.SHL_REG_MXX;
-import emulator.src.shift.SHL_REG_XX;
-import emulator.src.shift.SHR_REGX_MREGY;
-import emulator.src.shift.SHR_REGX_MREGY_XX;
-import emulator.src.shift.SHR_REGX_REGY;
-import emulator.src.shift.SHR_REG_MXX;
-import emulator.src.shift.SHR_REG_XX;
-import emulator.src.store.ST_MREGX_REGY;
-import emulator.src.store.ST_MREGX_XX_REGY;
-import emulator.src.store.ST_MXX_REG;
+import emulator.src.loadstore.LD_B_REGX_MREGY;
+import emulator.src.loadstore.LD_B_REGX_MREGY_XX;
+import emulator.src.loadstore.LD_B_REG_MXX;
+import emulator.src.loadstore.LD_REGX_MREGY;
+import emulator.src.loadstore.LD_REGX_MREGY_XX;
+import emulator.src.loadstore.LD_REG_MXX;
+import emulator.src.loadstore.ST_B_MREGX_REGY;
+import emulator.src.loadstore.ST_B_MREGX_XX_REGY;
+import emulator.src.loadstore.ST_B_MXX_REG;
+import emulator.src.loadstore.ST_MREGX_REGY;
+import emulator.src.loadstore.ST_MREGX_XX_REGY;
+import emulator.src.loadstore.ST_MXX_REG;
+import emulator.src.nopmovinpushrethalt.HALT;
+import emulator.src.nopmovinpushrethalt.IN_REG_XX;
+import emulator.src.nopmovinpushrethalt.IRET;
+import emulator.src.nopmovinpushrethalt.MOV_REGX_REGY;
+import emulator.src.nopmovinpushrethalt.MOV_REG_XX;
+import emulator.src.nopmovinpushrethalt.NOP;
+import emulator.src.nopmovinpushrethalt.OUT_XX_REG;
+import emulator.src.nopmovinpushrethalt.POP_REG;
+import emulator.src.nopmovinpushrethalt.PUSH_REG;
+import emulator.src.nopmovinpushrethalt.PUSH_XX;
+import emulator.src.nopmovinpushrethalt.RET;
 
 public class SrcModel extends AbstractTableModel {
 	private static final long serialVersionUID = 8062097745546805165L;
@@ -127,7 +108,7 @@ public class SrcModel extends AbstractTableModel {
 			try {
 				in = new FileInputStream(fileName);
 
-				byte[] buffer = new byte[65536 * 2];
+				byte[] buffer = new byte[65536];
 				in.read(buffer);
 
 				parse(buffer);
@@ -143,7 +124,7 @@ public class SrcModel extends AbstractTableModel {
 			BufferedReader in;
 			try {
 				in = new BufferedReader(new FileReader(fileName));
-				// in.readLine(); // preskočimo prvi red
+				// in.readLine(); // skip first line
 				String s = in.readLine();
 				in.close();
 				parse(s);
@@ -159,7 +140,7 @@ public class SrcModel extends AbstractTableModel {
 
 	private void parse(byte[] buffer) {
 		int t, t1, t2;
-		for (int i = 0; i < this.memory.length; i++) {
+		for (int i = 0; i < this.memory.length / 2; i++) {
 			t1 = buffer[i * 2];
 			if (t1 < 0) {
 				t1 = 256 + t1;
@@ -189,12 +170,13 @@ public class SrcModel extends AbstractTableModel {
 		int addr = 0;
 		boolean finished = false;
 		while (!finished) {
-			Instruction instr = getInstruction(memory, addr++);
+			Instruction instr = getInstruction(memory, addr);
+			addr += 2;
 			instr.setContent();
 			lines.add(instr);
 			instr.tableLine = lines.size() - 1;
 			if (instr.hasArgument)
-				addr++;
+				addr += 2;
 			if (addr == 65536)
 				finished = true;
 			addr_instr[instr.addr] = instr;
@@ -202,57 +184,40 @@ public class SrcModel extends AbstractTableModel {
 	}
 
 	public Instruction getInstruction(short[] memory, int addr) {
-		int ir = (int) memory[addr++];
+		int ir = (int) memory[addr / 2];
+		addr += 2;
 		int group = (ir >> 4) & 0xf;
 		int src = (ir >> 12) & 0xf;
 		int dest = (ir >> 8) & 0xf;
 		switch (ir & 0xf) {
 		case 0: {
-			// NOP/HALT GROUP
+			// NOP/MOV/IN/OUT/PUSH/POP/RET/IRET/HALT GROUP
 			switch (group) {
 			case 0:
 				return new NOP(memory, addr);
+			case 1:
+				return new MOV_REGX_REGY(memory, addr, src, dest);
+			case 2:
+				return new MOV_REG_XX(memory, addr, src, dest);
+			case 3:
+				return new IN_REG_XX(memory, addr, src, dest);
+			case 4:
+				return new OUT_XX_REG(memory, addr, src, dest);
+			case 5:
+				return new PUSH_REG(memory, addr, src, dest);
+			case 6:
+				return new PUSH_XX(memory, addr, src, dest);
+			case 7:
+				return new POP_REG(memory, addr, src, dest);
+			case 8:
+				return new RET(memory, addr, src, dest);
+			case 9:
+				return new IRET(memory, addr, src, dest);
 			case 0xf:
 				return new HALT(memory, addr);
-
 			}
 		}
 		case 1: {
-			// MOV/IN/OUT GROUP
-			switch (group) {
-			case 0:
-				return new MOV_REGX_REGY(memory, addr, src, dest);
-			case 1:
-				return new MOV_REG_XX(memory, addr, src, dest);
-			case 2:
-				return new IN_REG_XX(memory, addr, src, dest);
-			case 3:
-				return new OUT_XX_REG(memory, addr, src, dest);
-			}
-		}
-		case 2: {
-			// LOAD GROUP
-			switch (group) {
-			case 0:
-				return new LD_REGX_MREGY(memory, addr, src, dest);
-			case 1:
-				return new LD_REG_MXX(memory, addr, src, dest);
-			case 2:
-				return new LD_REGX_MREGY_XX(memory, addr, src, dest);
-			}
-		}
-		case 3: {
-			// STORE GROUP
-			switch (group) {
-			case 0:
-				return new ST_MREGX_REGY(memory, addr, src, dest);
-			case 1:
-				return new ST_MXX_REG(memory, addr, src, dest);
-			case 2:
-				return new ST_MREGX_XX_REGY(memory, addr, src, dest);
-			}
-		}
-		case 4: {
 			// JUMP GROUP
 			switch (group) {
 			case 0:
@@ -275,8 +240,8 @@ public class SrcModel extends AbstractTableModel {
 				return new JNP_XX(memory, addr, src, dest);
 			}
 		}
-		case 5: {
-			// CALL/RET GROUP
+		case 2: {
+			// CALL GROUP
 			switch (group) {
 			case 0:
 				return new CALL_XX(memory, addr, src, dest);
@@ -296,74 +261,241 @@ public class SrcModel extends AbstractTableModel {
 				return new CALLP_XX(memory, addr, src, dest);
 			case 8:
 				return new CALLNP_XX(memory, addr, src, dest);
-			case 9:
-				return new RET(memory, addr, src, dest);
-			case 10:
-				return new IRET(memory, addr, src, dest);
 			}
 		}
-		case 6: {
+		case 3: {
+			// LOAD/STORE GROUP
+			switch (group) {
+			case 0:
+				return new LD_REGX_MREGY(memory, addr, src, dest);
+			case 1:
+				return new LD_REG_MXX(memory, addr, src, dest);
+			case 2:
+				return new LD_REGX_MREGY_XX(memory, addr, src, dest);
+			case 3:
+				return new LD_B_REGX_MREGY(memory, addr, src, dest);
+			case 4:
+				return new LD_B_REG_MXX(memory, addr, src, dest);
+			case 5:
+				return new LD_B_REGX_MREGY_XX(memory, addr, src, dest);
+			case 8:
+				return new ST_MREGX_REGY(memory, addr, src, dest);
+			case 9:
+				return new ST_MXX_REG(memory, addr, src, dest);
+			case 10:
+				return new ST_MREGX_XX_REGY(memory, addr, src, dest);
+			case 11:
+				return new ST_B_MREGX_REGY(memory, addr, src, dest);
+			case 12:
+				return new ST_B_MXX_REG(memory, addr, src, dest);
+			case 13:
+				return new ST_B_MREGX_XX_REGY(memory, addr, src, dest);
+			}
+		}
+		case 4: {
 			// ADD/SUB GROUP
 			switch (group) {
 			case 0:
-				return new ADD_REGX_REGY(memory, addr, src, dest);
+				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.ADD);
 			case 1:
-				return new ADD_REG_XX(memory, addr, src, dest);
+				return new ALU_REG_XX(memory, addr, src, dest, Instruction.ADD);
 			case 2:
-				return new ADD_REGX_MREGY(memory, addr, src, dest);
+				return new ALU_REGX_MREGY(memory, addr, src, dest, Instruction.ADD);
 			case 3:
-				return new ADD_REG_MXX(memory, addr, src, dest);
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.ADD);
 			case 4:
-				return new ADD_REGX_MREGY_XX(memory, addr, src, dest);
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.ADD);
+			case 5:
+				return new ALU_B_REGX_MREGY(memory, addr, src, dest, Instruction.ADD_B);
 			case 6:
-				return new SUB_REGX_REGY(memory, addr, src, dest);
+				return new ALU_B_REG_MXX(memory, addr, src, dest, Instruction.ADD_B);
 			case 7:
-				return new SUB_REG_XX(memory, addr, src, dest);
+				return new ALU_B_REGX_MREGY_XX(memory, addr, src, dest, Instruction.ADD_B);
 			case 8:
-				return new SUB_REGX_MREGY(memory, addr, src, dest);
+				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.SUB);
 			case 9:
-				return new SUB_REG_MXX(memory, addr, src, dest);
+				return new ALU_REG_XX(memory, addr, src, dest, Instruction.SUB);
 			case 10:
-				return new SUB_REGX_MREGY_XX(memory, addr, src, dest);
+				return new ALU_REGX_MREGY(memory, addr, src, dest, Instruction.SUB);
+			case 11:
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.SUB);
+			case 12:
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.SUB);
+			case 13:
+				return new ALU_B_REGX_MREGY(memory, addr, src, dest, Instruction.SUB_B);
+			case 14:
+				return new ALU_B_REG_MXX(memory, addr, src, dest, Instruction.SUB_B);
+			case 15:
+				return new ALU_B_REGX_MREGY_XX(memory, addr, src, dest, Instruction.SUB_B);
+			}
+		}
+		case 5: {
+			// AND/OR GROUP
+			switch (group) {
+			case 0:
+				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.AND);
+			case 1:
+				return new ALU_REG_XX(memory, addr, src, dest, Instruction.AND);
+			case 2:
+				return new ALU_REGX_MREGY(memory, addr, src, dest, Instruction.AND);
+			case 3:
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.AND);
+			case 4:
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.AND);
+			case 5:
+				return new ALU_B_REGX_MREGY(memory, addr, src, dest, Instruction.AND_B);
+			case 6:
+				return new ALU_B_REG_MXX(memory, addr, src, dest, Instruction.AND_B);
+			case 7:
+				return new ALU_B_REGX_MREGY_XX(memory, addr, src, dest, Instruction.AND_B);
+			case 8:
+				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.OR);
+			case 9:
+				return new ALU_REG_XX(memory, addr, src, dest, Instruction.OR);
+			case 10:
+				return new ALU_REGX_MREGY(memory, addr, src, dest, Instruction.OR);
+			case 11:
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.OR);
+			case 12:
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.OR);
+			case 13:
+				return new ALU_B_REGX_MREGY(memory, addr, src, dest, Instruction.OR_B);
+			case 14:
+				return new ALU_B_REG_MXX(memory, addr, src, dest, Instruction.OR_B);
+			case 15:
+				return new ALU_B_REGX_MREGY_XX(memory, addr, src, dest, Instruction.OR_B);
+			}
+		}
+		case 6: {
+			// XOR GROUP
+			switch (group) {
+			case 0:
+				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.XOR);
+			case 1:
+				return new ALU_REG_XX(memory, addr, src, dest, Instruction.XOR);
+			case 2:
+				return new ALU_REGX_MREGY(memory, addr, src, dest, Instruction.XOR);
+			case 3:
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.XOR);
+			case 4:
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.XOR);
+			case 5:
+				return new ALU_B_REGX_MREGY(memory, addr, src, dest, Instruction.XOR_B);
+			case 6:
+				return new ALU_B_REG_MXX(memory, addr, src, dest, Instruction.XOR_B);
+			case 7:
+				return new ALU_B_REGX_MREGY_XX(memory, addr, src, dest, Instruction.XOR_B);
 			}
 		}
 		case 7: {
-			// AND/OR/XOR GROUP
+			// SHL/SHR GROUP
 			switch (group) {
 			case 0:
-				return new AND_REGX_REGY(memory, addr, src, dest);
+				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.SHL);
 			case 1:
-				return new AND_REG_XX(memory, addr, src, dest);
+				return new ALU_REG_XX(memory, addr, src, dest, Instruction.SHL);
 			case 2:
-				return new AND_REGX_MREGY(memory, addr, src, dest);
+				return new ALU_REGX_MREGY(memory, addr, src, dest, Instruction.SHL);
 			case 3:
-				return new AND_REG_MXX(memory, addr, src, dest);
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.SHL);
 			case 4:
-				return new AND_REGX_MREGY_XX(memory, addr, src, dest);
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.SHL);
 			case 5:
-				return new OR_REGX_REGY(memory, addr, src, dest);
+				return new ALU_B_REGX_MREGY(memory, addr, src, dest, Instruction.SHL_B);
 			case 6:
-				return new OR_REG_XX(memory, addr, src, dest);
+				return new ALU_B_REG_MXX(memory, addr, src, dest, Instruction.SHL_B);
 			case 7:
-				return new OR_REGX_MREGY(memory, addr, src, dest);
+				return new ALU_B_REGX_MREGY_XX(memory, addr, src, dest, Instruction.SHL_B);
 			case 8:
-				return new OR_REG_MXX(memory, addr, src, dest);
+				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.SHR);
 			case 9:
-				return new OR_REGX_MREGY_XX(memory, addr, src, dest);
+				return new ALU_REG_XX(memory, addr, src, dest, Instruction.SHR);
 			case 10:
-				return new XOR_REGX_REGY(memory, addr, src, dest);
+				return new ALU_REGX_MREGY(memory, addr, src, dest, Instruction.SHR);
 			case 11:
-				return new XOR_REG_XX(memory, addr, src, dest);
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.SHR);
 			case 12:
-				return new XOR_REGX_MREGY(memory, addr, src, dest);
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.SHR);
 			case 13:
-				return new XOR_REG_MXX(memory, addr, src, dest);
+				return new ALU_B_REGX_MREGY(memory, addr, src, dest, Instruction.SHR_B);
 			case 14:
-				return new XOR_REGX_MREGY_XX(memory, addr, src, dest);
+				return new ALU_B_REG_MXX(memory, addr, src, dest, Instruction.SHR_B);
+			case 15:
+				return new ALU_B_REGX_MREGY_XX(memory, addr, src, dest, Instruction.SHR_B);
 			}
 		}
 		case 8: {
-			// CMP GROUP
+			// MUL/DIV GROUP
+			switch (group) {
+			case 0:
+				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.MUL);
+			case 1:
+				return new ALU_REG_XX(memory, addr, src, dest, Instruction.MUL);
+			case 2:
+				return new ALU_REGX_MREGY(memory, addr, src, dest, Instruction.MUL);
+			case 3:
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.MUL);
+			case 4:
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.MUL);
+			case 5:
+				return new ALU_B_REGX_MREGY(memory, addr, src, dest, Instruction.MUL_B);
+			case 6:
+				return new ALU_B_REG_MXX(memory, addr, src, dest, Instruction.MUL_B);
+			case 7:
+				return new ALU_B_REGX_MREGY_XX(memory, addr, src, dest, Instruction.MUL_B);
+			case 8:
+				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.DIV);
+			case 9:
+				return new ALU_REG_XX(memory, addr, src, dest, Instruction.DIV);
+			case 10:
+				return new ALU_REGX_MREGY(memory, addr, src, dest, Instruction.DIV);
+			case 11:
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.DIV);
+			case 12:
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.DIV);
+			case 13:
+				return new ALU_B_REGX_MREGY(memory, addr, src, dest, Instruction.DIV_B);
+			case 14:
+				return new ALU_REG_MXX(memory, addr, src, dest, Instruction.DIV_B);
+			case 15:
+				return new ALU_REGX_MREGY_XX(memory, addr, src, dest, Instruction.DIV_B);
+			}
+		}
+		case 9: {
+			// INC/DEC GROUP
+			switch (group) {
+			case 0:
+				return new INC_REG(memory, addr, src, dest);
+			case 1:
+				return new INC_MREG(memory, addr, src, dest);
+			case 2:
+				return new INC_MXX(memory, addr, src, dest);
+			case 3:
+				return new INC_MREG_XX(memory, addr, src, dest);
+			case 4:
+				return new INC_B_MREG(memory, addr, src, dest);
+			case 5:
+				return new INC_B_MXX(memory, addr, src, dest);
+			case 6:
+				return new INC_B_MREG_XX(memory, addr, src, dest);
+			case 8:
+				return new DEC_REG(memory, addr, src, dest);
+			case 9:
+				return new DEC_MREG(memory, addr, src, dest);
+			case 10:
+				return new DEC_MXX(memory, addr, src, dest);
+			case 11:
+				return new DEC_MREG_XX(memory, addr, src, dest);
+			case 12:
+				return new DEC_B_MREG(memory, addr, src, dest);
+			case 13:
+				return new DEC_B_MXX(memory, addr, src, dest);
+			case 14:
+				return new DEC_B_MREG_XX(memory, addr, src, dest);
+			}
+		}
+		case 10: {
+			// CMP/NEG GROUP
 			switch (group) {
 			case 0:
 				return new CMP_REGX_REGY(memory, addr, src, dest);
@@ -375,27 +507,12 @@ public class SrcModel extends AbstractTableModel {
 				return new CMP_REG_MXX(memory, addr, src, dest);
 			case 4:
 				return new CMP_REGX_MREGY_XX(memory, addr, src, dest);
-			}
-		}
-		case 9: {
-			// INC/DEC/NEG GROUP
-			switch (group) {
-			case 0:
-				return new INC_REG(memory, addr, src, dest);
-			case 1:
-				return new INC_MREG(memory, addr, src, dest);
-			case 2:
-				return new INC_MXX(memory, addr, src, dest);
-			case 3:
-				return new INC_MREG_XX(memory, addr, src, dest);
-			case 4:
-				return new DEC_REG(memory, addr, src, dest);
 			case 5:
-				return new DEC_MREG(memory, addr, src, dest);
+				return new CMP_B_REGX_MREGY(memory, addr, src, dest);
 			case 6:
-				return new DEC_MXX(memory, addr, src, dest);
+				return new CMP_B_REG_MXX(memory, addr, src, dest);
 			case 7:
-				return new DEC_MREG_XX(memory, addr, src, dest);
+				return new CMP_B_REGX_MREGY_XX(memory, addr, src, dest);
 			case 8:
 				return new NEG_REG(memory, addr, src, dest);
 			case 9:
@@ -404,67 +521,12 @@ public class SrcModel extends AbstractTableModel {
 				return new NEG_MXX(memory, addr, src, dest);
 			case 11:
 				return new NEG_MREG_XX(memory, addr, src, dest);
-			}
-		}
-		case 10: {
-			// MUL/DIV GROUP
-			switch (group) {
-			case 0:
-				return new MUL_REGX_REGY(memory, addr, src, dest);
-			case 1:
-				return new MUL_REG_XX(memory, addr, src, dest);
-			case 2:
-				return new MUL_REGX_MREGY(memory, addr, src, dest);
-			case 3:
-				return new MUL_REG_MXX(memory, addr, src, dest);
-			case 4:
-				return new MUL_REGX_MREGY_XX(memory, addr, src, dest);
-			case 6:
-				return new DIV_REGX_REGY(memory, addr, src, dest);
-			case 7:
-				return new DIV_REG_XX(memory, addr, src, dest);
-			case 8:
-				return new DIV_REGX_MREGY(memory, addr, src, dest);
-			case 9:
-				return new DIV_REG_MXX(memory, addr, src, dest);
-			case 10:
-				return new DIV_REGX_MREGY_XX(memory, addr, src, dest);
-			}
-		}
-		case 11: {
-			// PUSH/POP GROUP
-			switch (group) {
-			case 0:
-				return new PUSH_REG(memory, addr, src, dest);
-			case 1:
-				return new PUSH_XX(memory, addr, src, dest);
-			case 2:
-				return new POP_REG(memory, addr, src, dest);
-			}
-		}
-		case 12: {
-			// SHIFT GROUP
-			switch (group) {
-			case 0:
-				return new SHL_REGX_REGY(memory, addr, src, dest);
-			case 1:
-				return new SHL_REG_XX(memory, addr, src, dest);
-			case 2:
-				return new SHL_REGX_MREGY(memory, addr, src, dest);
-			case 3:
-				return new SHL_REG_MXX(memory, addr, src, dest);
-			case 4:
-				return new SHL_REGX_MREGY_XX(memory, addr, src, dest);
-			case 6:
-				return new SHR_REGX_REGY(memory, addr, src, dest);
-			case 7:
-				return new SHR_REG_XX(memory, addr, src, dest);
-			case 8:
-				return new SHR_REGX_MREGY(memory, addr, src, dest);
-			case 9:
-				return new SHR_REG_MXX(memory, addr, src, dest);
-			case 10:
-				return new SHR_REGX_MREGY_XX(memory, addr, src, dest);
+			case 12:
+				return new NEG_B_MREG(memory, addr, src, dest);
+			case 13:
+				return new NEG_B_MXX(memory, addr, src, dest);
+			case 14:
+				return new NEG_B_MREG_XX(memory, addr, src, dest);
 			}
 		}
 		}

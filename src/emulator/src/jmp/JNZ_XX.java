@@ -16,7 +16,7 @@ public class JNZ_XX extends Instruction {
 		if ((ctx.f.val & 0x1) == 0) {
 			ctx.pc.val = this.argument;
 		} else {
-			ctx.pc.val +=2;
+			ctx.pc.val += 4;
 		}
 	}
 }

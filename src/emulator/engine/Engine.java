@@ -2,7 +2,7 @@ package emulator.engine;
 
 import javax.swing.SwingWorker;
 
-import emulator.Main;
+import emulator.EmulatorMain;
 import emulator.framebuffer.FBViewer;
 import emulator.memviewer.MemViewer;
 import emulator.src.Instruction;
@@ -14,7 +14,7 @@ import emulator.src.NotImplementedException;
  */
 public class Engine {
 	public Context ctx;
-	public Main main;
+	public EmulatorMain main;
 	public SwingWorker<Void, Instruction> worker;
 	public boolean running = false;
 	private MemViewer memViewer;
@@ -22,12 +22,12 @@ public class Engine {
 	private FBViewer fbViewer;
 	private boolean halted;
 	
-	public static short IRQ1_ADDR = 8;
+	public static short IRQ1_ADDR = 16;
 	public static boolean irq1 = false;
 	
 	public static int VIDEO_OFFS = 2400;
 
-	public Engine(Context ctx, Main main) {
+	public Engine(Context ctx, EmulatorMain main) {
 		this.ctx = ctx;
 		this.main = main;
 		this.worker = null;
@@ -95,20 +95,11 @@ public class Engine {
 				return null;
 			}
 
-			/**
-			 * Prima medjurezultate, i odavde ih prikazujem u swing komponentama
-			 * Ako metoda publish posalje jednu vrednost, lista chunks ima jedan
-			 * element: publish(1, 2, 3) -> process(1, 2, 3), odn. lista chunks
-			 * ima tri elementa.
-			 */
 			@Override
 			protected void process(java.util.List<Instruction> chunks) {
 				refreshUI(chunks.get(0));
 			}
 
-			/**
-			 * Poziva se kada se zavrsi izvrsenje (milom ili silom).
-			 */
 			@Override
 			protected void done() {
 				main.btnRun.setEnabled(true);
@@ -116,7 +107,6 @@ public class Engine {
 			}
 		};
 
-		// startujemo worker
 		worker.execute();
 	}
 
@@ -124,11 +114,11 @@ public class Engine {
 
 	private void prepareIrq() {
 		// Push flags
-		ctx.memory[ctx.sp.val] = ctx.f.val;
-		ctx.sp.val++;
+		ctx.memory[ctx.sp.val / 2] = ctx.f.val;
+		ctx.sp.val += 2;
 		// Push PC
-		ctx.memory[ctx.sp.val] = ctx.pc.val;
-		ctx.sp.val++;
+		ctx.memory[ctx.sp.val / 2] = ctx.pc.val;
+		ctx.sp.val += 2;
 		// Jump to the IRQ1 handler
 		ctx.pc.val = Engine.IRQ1_ADDR;
 		Engine.irq1 = false;
@@ -174,7 +164,7 @@ public class Engine {
 
 	private boolean isCall(Instruction i) {
 		switch (i.opcode & 0x000f) {
-		case 0x5:
+		case 0x2:
 			return true;
 		}
 		return false;
@@ -223,9 +213,9 @@ public class Engine {
 		sfViewer.updateCell(addr, content);
 		fbViewer.updateCell(addr, content);
 		
-		sfViewer.tblMem.setRowSelectionInterval(addr / 4, addr / 4);
-		sfViewer.tblMem.setColumnSelectionInterval((addr % 4) + 1, (addr % 4) + 1);
-		sfViewer.tblMem.scrollRectToVisible(sfViewer.tblMem.getCellRect(addr / 4, 0, true));
+		sfViewer.tblMem.setRowSelectionInterval(addr / 8, addr / 8);
+		sfViewer.tblMem.setColumnSelectionInterval(((addr/2) % 4)/2 + 1, ((addr/2) % 4)/2 + 1);
+		sfViewer.tblMem.scrollRectToVisible(sfViewer.tblMem.getCellRect(addr / 8, 0, true));
 		sfViewer.src.revalidate();
 		sfViewer.src.repaint();
 	}

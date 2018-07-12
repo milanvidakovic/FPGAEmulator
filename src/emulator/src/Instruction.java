@@ -8,6 +8,25 @@ public class Instruction {
 	public static final int ADDR = 1;
 	public static final int CONTENT = 2;
 	public static final int ASSEMBLER = 3;
+	
+	public static final int ADD = 1;
+	public static final int SUB = 2;
+	public static final int AND = 3;
+	public static final int OR  = 4;
+	public static final int XOR = 5;
+	public static final int SHR = 6;
+	public static final int SHL = 7;
+	public static final int MUL = 8;
+	public static final int DIV = 9;
+	public static final int ADD_B = 10;
+	public static final int SUB_B = 11;
+	public static final int AND_B = 12;
+	public static final int OR_B  = 13;
+	public static final int XOR_B = 14;
+	public static final int SHR_B = 15;
+	public static final int SHL_B = 16;
+	public static final int MUL_B = 17;
+	public static final int DIV_B = 18;
 
 	public boolean breakPoint;
 	public int addr;
@@ -29,9 +48,9 @@ public class Instruction {
 	public int tableLine;
 
 	private Instruction(short[]memory, int addr) {
-		this.addr = addr - 1;
+		this.addr = addr - 2;
 		this.memory = memory;
-		this.opcode = memory[this.addr];
+		this.opcode = memory[this.addr / 2];
 		setContent();
 	}
 
@@ -86,7 +105,7 @@ public class Instruction {
 	}
 
 	public void setArgument() {
-		this.argument = memory[this.addr + 1];
+		this.argument = memory[(this.addr + 2) / 2];
 		this.hasArgument = true;
 	}
 
@@ -156,5 +175,30 @@ public class Instruction {
 	
 	private int neg(int arg) {
 		return (65536 - arg) & 0xffff;
+	}
+
+	public static String getTypeStr(int type) {
+		switch(type) {
+		case ADD: return "add ";
+		case SUB: return "sub ";
+		case AND: return "and ";
+		case OR : return "or ";
+		case XOR: return "xor ";
+		case SHL: return "shl ";
+		case SHR: return "shr ";
+		case MUL: return "mul ";
+		case DIV: return "div ";
+		case ADD_B: return "add.b ";
+		case SUB_B: return "sub.b ";
+		case AND_B: return "and.b ";
+		case OR_B : return "or.b ";
+		case XOR_B: return "xor.b ";
+		case SHL_B: return "shl.b ";
+		case SHR_B: return "shr.b ";
+		case MUL_B: return "mul.b ";
+		case DIV_B: return "div.b ";
+		default:
+			return "UNKNOWN";
+		}
 	}
 }
