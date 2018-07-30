@@ -1,6 +1,6 @@
 package emulator.src.loadstore;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class LD_REGX_MREGY extends Instruction {
@@ -10,7 +10,7 @@ public class LD_REGX_MREGY extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		ctx.getReg(this.dest).val = ctx.memory[fix(ctx.getReg(this.src).val) / 2];
 		ctx.pc.val += 2;
 	}

@@ -1,6 +1,6 @@
 package emulator.src.nopmovinpushrethalt;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class MOV_REGX_REGY extends Instruction {
@@ -10,7 +10,7 @@ public class MOV_REGX_REGY extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		ctx.getReg(this.dest).val = ctx.getReg(this.src).val;
 		ctx.pc.val += 2;
 	}

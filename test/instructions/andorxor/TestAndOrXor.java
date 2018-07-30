@@ -2,7 +2,7 @@ package instructions.andorxor;
 
 import org.junit.Test;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 import emulator.src.alu.ALU_REGX_REGY;
 import emulator.src.cmpneg.NEG_REG;
@@ -12,7 +12,7 @@ public class TestAndOrXor {
 
 	@Test
 	public void testAND_A_B() {
-		Context ctx = new Context();
+		CpuContext ctx = new CpuContext();
 		int src = 0, dest = 1;
 		ALU_REGX_REGY n = new ALU_REGX_REGY(new short[2], 1, src, dest, Instruction.AND);
 		ctx.getReg(src).val = 1;
@@ -38,7 +38,7 @@ public class TestAndOrXor {
 	
 	@Test
 	public void testNEG_A() {
-		Context ctx = new Context();
+		CpuContext ctx = new CpuContext();
 		int src = 0;
 		NEG_REG n = new NEG_REG(new short[2], 1, src, 0);
 		ctx.getReg(src).val = 1;

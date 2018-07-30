@@ -2,15 +2,15 @@ package emulator.framebuffer;
 
 import javax.swing.table.AbstractTableModel;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.engine.Engine;
 
 public class FBModel extends AbstractTableModel {
 	private static final long serialVersionUID = 305334635501584898L;
 	
-	private Context ctx;
+	public CpuContext ctx;
 	
-	public FBModel(Context ctx) {
+	public FBModel(CpuContext ctx) {
 		this.ctx = ctx;
 		
 	}
@@ -55,7 +55,7 @@ public class FBModel extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		fireTableDataChanged();
+		//fireTableDataChanged();
 		fireTableCellUpdated(row, col);
 	}
 }

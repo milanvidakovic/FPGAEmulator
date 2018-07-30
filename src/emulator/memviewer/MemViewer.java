@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.engine.Engine;
 
 /**
@@ -24,7 +24,7 @@ public class MemViewer extends JFrame {
 
 	public JLabel display = new JLabel();
 
-	public MemViewer(Context ctx, Engine eng, String catName) {
+	public MemViewer(CpuContext ctx, Engine eng, String catName) {
 		super();
 		if (catName.equals("MemViewer")) {
 			setTitle("Memory");

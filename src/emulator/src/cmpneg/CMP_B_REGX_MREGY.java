@@ -1,6 +1,6 @@
 package emulator.src.cmpneg;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class CMP_B_REGX_MREGY extends Instruction {
@@ -10,7 +10,7 @@ public class CMP_B_REGX_MREGY extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		short old_a = ctx.getReg(this.dest).val;
 
 		int fixedAddr = fix(ctx.getReg(this.src).val);

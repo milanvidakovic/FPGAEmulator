@@ -24,7 +24,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.engine.Engine;
 import emulator.framebuffer.FBViewer;
 import emulator.memviewer.MemViewer;
@@ -51,7 +51,7 @@ public class EmulatorMain extends JFrame {
 	/**
 	 * CPU context. Holds all registers, flags and memory.
 	 */
-	Context ctx = new Context();
+	CpuContext ctx = new CpuContext();
 	/**
 	 * Execution engine. Capable of running in full speed,
 	 * stepping over and stepping into. supports breakpoints.
@@ -175,7 +175,7 @@ public class EmulatorMain extends JFrame {
 		btnReset.addActionListener(e -> {
 			eng.reset();
 		});
-		btnReset.setToolTipText("R");
+		btnReset.setToolTipText("Ctrl+R");
 		btnReset.setEnabled(false);
 		commands.add(Box.createHorizontalStrut(100));
 		commands.add(btnExit);
@@ -207,8 +207,10 @@ public class EmulatorMain extends JFrame {
 						e.consume();
 						break;
 					case KeyEvent.VK_R:
-						btnReset.doClick();
-						e.consume();
+						if (e.isControlDown()) {
+							btnReset.doClick();
+							e.consume();
+						}
 						break;
 					}
 				}

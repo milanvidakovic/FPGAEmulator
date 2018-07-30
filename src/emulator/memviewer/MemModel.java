@@ -2,7 +2,7 @@ package emulator.memviewer;
 
 import javax.swing.table.AbstractTableModel;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 
 public class MemModel extends AbstractTableModel {
 	private static final long serialVersionUID = 305334635501584898L;
@@ -10,9 +10,9 @@ public class MemModel extends AbstractTableModel {
 	public String[] columnNames = { "Addr", "W1", "W2", "W3", "W4"};
 	public short[][] grid = new short[65536 / 4][5];
 
-	private Context ctx;
+	private CpuContext ctx;
 	
-	public MemModel(Context ctx) {
+	public MemModel(CpuContext ctx) {
 		this.ctx = ctx;
 		
 		int addr = 0;

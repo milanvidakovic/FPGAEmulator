@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class Register extends JLabel {
@@ -15,7 +15,7 @@ public class Register extends JLabel {
 	public String name;
 	public short val;
 
-	public Register(String name, Context ctx) {
+	public Register(String name, CpuContext ctx) {
 		this.name = name;
 		this.setFont(this.getFont().deriveFont(32f));
 		update();

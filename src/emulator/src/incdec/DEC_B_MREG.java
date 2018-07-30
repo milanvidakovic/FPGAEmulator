@@ -1,6 +1,6 @@
 package emulator.src.incdec;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class DEC_B_MREG extends Instruction {
@@ -10,7 +10,7 @@ public class DEC_B_MREG extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		int fixedAddr = fix(ctx.getReg(this.dest).val);
 		short operand;
 		if ((fixedAddr & 1) == 0)

@@ -1,6 +1,6 @@
 package emulator.src.cmpneg;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class NEG_REG extends Instruction {
@@ -10,7 +10,7 @@ public class NEG_REG extends Instruction {
 	}
 	
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		int res = ~ctx.getReg(this.dest).val;
 		ctx.getReg(this.dest).val = (short)res;
 		markFlags(res, ctx.getReg(this.dest).val, ctx);

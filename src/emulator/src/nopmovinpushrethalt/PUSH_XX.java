@@ -1,6 +1,6 @@
 package emulator.src.nopmovinpushrethalt;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class PUSH_XX extends Instruction {
@@ -11,7 +11,7 @@ public class PUSH_XX extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		int v = fix(ctx.sp.val);
 		ctx.memory[v / 2] = this.argument;
 		ctx.sp.val += 2;

@@ -1,6 +1,6 @@
 package emulator.src.nopmovinpushrethalt;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class OUT_XX_REG extends Instruction {
@@ -11,7 +11,7 @@ public class OUT_XX_REG extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		// TODO: implement OUT
 		ctx.pc.val += 4;
 	}

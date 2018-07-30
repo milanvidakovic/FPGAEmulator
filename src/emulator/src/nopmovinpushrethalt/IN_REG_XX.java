@@ -1,6 +1,6 @@
 package emulator.src.nopmovinpushrethalt;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class IN_REG_XX extends Instruction {
@@ -11,7 +11,7 @@ public class IN_REG_XX extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		ctx.getReg(this.dest).val = ctx.fromPort(this.argument);
 		ctx.pc.val += 4;
 	}

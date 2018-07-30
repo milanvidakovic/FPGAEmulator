@@ -1,6 +1,6 @@
 package emulator.src.cmpneg;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class CMP_REG_MXX extends Instruction {
@@ -11,7 +11,7 @@ public class CMP_REG_MXX extends Instruction {
 	}
 	
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		short old_a = ctx.getReg(this.dest).val;
 		int res = ctx.getReg(this.dest).val - ctx.memory[fix(this.argument) / 2];
 		markFlags(res, (short)res, ctx);

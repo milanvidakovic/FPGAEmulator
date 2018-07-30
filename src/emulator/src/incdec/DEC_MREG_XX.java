@@ -1,6 +1,6 @@
 package emulator.src.incdec;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class DEC_MREG_XX extends Instruction {
@@ -11,7 +11,7 @@ public class DEC_MREG_XX extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		int res = ctx.memory[fix(ctx.getReg(this.dest).val + this.argument) / 2] - 1;
 		ctx.memory[fix(ctx.getReg(this.dest).val + this.argument) / 2] = (short)res;
 		markFlags(res, (short)res, ctx);

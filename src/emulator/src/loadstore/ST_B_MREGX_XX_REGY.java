@@ -1,6 +1,6 @@
 package emulator.src.loadstore;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class ST_B_MREGX_XX_REGY extends Instruction {
@@ -10,7 +10,7 @@ public class ST_B_MREGX_XX_REGY extends Instruction {
 		super.setAssembler("st.b [" + this.sdest + " + 0x%04x], " + this.ssrc);
 	}
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		
 		int fixedAddr = fix(ctx.getReg(this.dest).val + this.argument);
 		short content = ctx.memory[fixedAddr / 2];

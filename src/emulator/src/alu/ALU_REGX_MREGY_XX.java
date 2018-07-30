@@ -1,6 +1,6 @@
 package emulator.src.alu;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class ALU_REGX_MREGY_XX extends Instruction {
@@ -14,7 +14,7 @@ public class ALU_REGX_MREGY_XX extends Instruction {
 	}
 	
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		short old_a = ctx.getReg(this.dest).val;
 		int res = 0;
 		switch (type) {

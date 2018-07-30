@@ -1,6 +1,6 @@
 package emulator.src.call;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class CALLP_XX extends Instruction {
@@ -12,7 +12,7 @@ public class CALLP_XX extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		if ((ctx.f.val & 0x8) == 1) {
 			ctx.memory[fix(ctx.sp.val)] = (short)(ctx.pc.val + 4);
 			updateViewer(ctx, fix(ctx.sp.val), (short)(ctx.pc.val + 4));

@@ -1,6 +1,6 @@
 package emulator.src.jmp;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class JZ_XX extends Instruction {
@@ -12,7 +12,7 @@ public class JZ_XX extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		if ((ctx.f.val & 1) == 1) {
 			ctx.pc.val = this.argument;
 		} else {

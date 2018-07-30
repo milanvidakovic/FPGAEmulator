@@ -1,6 +1,6 @@
 package emulator.src.nopmovinpushrethalt;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class RET extends Instruction {
@@ -10,7 +10,7 @@ public class RET extends Instruction {
 	}
 
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		ctx.sp.val -= 2;
 		ctx.pc.val = ctx.memory[fix(ctx.sp.val) / 2];
 	}

@@ -1,6 +1,6 @@
 package emulator.src;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 
 public class Instruction {
 
@@ -78,7 +78,7 @@ public class Instruction {
 		return "";
 	}
 
-	public void exec(Context ctx) throws NotImplementedException {
+	public void exec(CpuContext ctx) throws NotImplementedException {
 		throw new NotImplementedException(this.assembler + " not implemented yet!");
 	}
 	
@@ -130,7 +130,7 @@ public class Instruction {
 		return w & 0x000000000000FFFF;
 	}
 
-	protected void markFlags(int res, short r, Context ctx) {
+	protected void markFlags(int res, short r, CpuContext ctx) {
 		// Z flag
 		if (r == 0) {
 			ctx.f.val |= 1;
@@ -152,7 +152,7 @@ public class Instruction {
 		}
 	}
 	
-	protected void markOverflow(short a, short b, short res, Context ctx) {
+	protected void markOverflow(short a, short b, short res, CpuContext ctx) {
 		int sa = sign(a);
 		int sb = sign(b);
 		int sr = sign(res);
@@ -169,7 +169,7 @@ public class Instruction {
 		return a & 0x8000;
 	}
 
-	protected void updateViewer(Context ctx, int addr, short content) {
+	protected void updateViewer(CpuContext ctx, int addr, short content) {
 		ctx.engine.updateViewer(addr, content);
 	}
 	

@@ -6,7 +6,7 @@ import emulator.src.SrcModel;
 /**
  * CPU context. Holds all registers, flags and memory.
  */
-public class Context {
+public class CpuContext {
 	public Register r0 = new Register("r0", this);
 	public Register r1 = new Register("r1", this);
 	public Register r2 = new Register("r2", this);
@@ -29,7 +29,7 @@ public class Context {
 	public SrcModel mdl;
 	public Engine engine;
 
-	public Context() {
+	public CpuContext() {
 		this.mdl = new SrcModel(this.memory);
 	}
 

@@ -1,6 +1,6 @@
 package emulator.src.nopmovinpushrethalt;
 
-import emulator.engine.Context;
+import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
 public class PUSH_REG extends Instruction {
@@ -10,7 +10,7 @@ public class PUSH_REG extends Instruction {
 	}
 	
 	@Override
-	public void exec(Context ctx) {
+	public void exec(CpuContext ctx) {
 		int v = fix(ctx.sp.val);
 		ctx.memory[v / 2] = ctx.getReg(this.dest).val;
 		ctx.sp.val += 2;

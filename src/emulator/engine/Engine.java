@@ -13,7 +13,7 @@ import emulator.src.NotImplementedException;
  * stepping into. supports breakpoints.
  */
 public class Engine {
-	public Context ctx;
+	public CpuContext ctx;
 	public EmulatorMain main;
 	public SwingWorker<Void, Instruction> worker;
 	public boolean running = false;
@@ -27,7 +27,7 @@ public class Engine {
 	
 	public static int VIDEO_OFFS = 2400;
 
-	public Engine(Context ctx, EmulatorMain main) {
+	public Engine(CpuContext ctx, EmulatorMain main) {
 		this.ctx = ctx;
 		this.main = main;
 		this.worker = null;
