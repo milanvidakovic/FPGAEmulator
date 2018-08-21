@@ -54,7 +54,7 @@ public class Engine {
 		}
 		if (this.fromStepOver) {
 			this.fromStepOver = false;
-			Instruction i = ctx.mdl.addr_instr[ctx.pc.val];
+			Instruction i = ctx.mdl.addr_instr[Instruction.fix(ctx.pc.val)];
 			if (i.breakPoint) {
 				i.breakPoint = false;
 				this.ctx.mdl.fireTableDataChanged();
@@ -79,7 +79,7 @@ public class Engine {
 					if (Engine.irq1) {
 						prepareIrq();
 					}
-					Instruction i = ctx.mdl.addr_instr[ctx.pc.val];
+					Instruction i = ctx.mdl.addr_instr[Instruction.fix(ctx.pc.val)];
 					if (i.breakPoint) {
 						stop();
 						break;
@@ -110,14 +110,12 @@ public class Engine {
 		worker.execute();
 	}
 
-	
-
 	private void prepareIrq() {
 		// Push flags
-		ctx.memory[ctx.sp.val / 2] = ctx.f.val;
+		ctx.memory[Instruction.fix(ctx.sp.val) / 2] = ctx.f.val;
 		ctx.sp.val += 2;
 		// Push PC
-		ctx.memory[ctx.sp.val / 2] = ctx.pc.val;
+		ctx.memory[Instruction.fix(ctx.sp.val) / 2] = ctx.pc.val;
 		ctx.sp.val += 2;
 		// Jump to the IRQ1 handler
 		ctx.pc.val = Engine.IRQ1_ADDR;
@@ -131,12 +129,13 @@ public class Engine {
 			ctx.mdl.addr_instr[Engine.IRQ1_ADDR] = instr;
 		}
 	}
+	
 	public void stepInto() throws NotImplementedException {
 		if (!halted) {
 			if (Engine.irq1) {
 				prepareIrq();
 			}
-			Instruction i = ctx.mdl.addr_instr[ctx.pc.val];
+			Instruction i = ctx.mdl.addr_instr[Instruction.fix(ctx.pc.val)];
 			i.exec(ctx);
 			refreshUI(i);
 		}
@@ -147,7 +146,7 @@ public class Engine {
 	public void stepOver() throws NotImplementedException {
 		if (!halted) {
 			this.fromStepOver = false;
-			Instruction i = ctx.mdl.addr_instr[ctx.pc.val];
+			Instruction i = ctx.mdl.addr_instr[Instruction.fix(ctx.pc.val)];
 			if (i != null && isCall(i)) {
 				Instruction next = ctx.mdl.lines.get(i.tableLine + 1);
 				if (next != null) {
@@ -186,8 +185,6 @@ public class Engine {
 		if (i != null && ctx.pc.val < ctx.mdl.addr_instr.length) {
 			i = ctx.mdl.addr_instr[Instruction.fix(ctx.pc.val)];
 			main.tblSrc.setRowSelectionInterval(i.tableLine, i.tableLine);
-//			System.out.println(main.tblSrc.getCellRect(i.tableLine, 0, true).y);
-//			System.out.println(main.src.getViewport().getHeight());
 			if (main.tblSrc.getCellRect(i.tableLine, 0, true).y > main.src.getViewport().getHeight()) {
 				main.tblSrc.scrollRectToVisible(main.tblSrc.getCellRect(i.tableLine, 0, true));
 			} else {

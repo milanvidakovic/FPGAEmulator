@@ -1,5 +1,6 @@
 package emulator.engine;
 
+import emulator.framebuffer.FBViewer;
 import emulator.registers.Register;
 import emulator.src.SrcModel;
 
@@ -94,5 +95,16 @@ public class CpuContext {
 		}
 		}
 		return 0;
+	}
+	
+	public void toPort(short port, int value) {
+		switch (port) {
+		case 128:
+			if (value == 1)
+				engine.main.fbViewer.setMode(FBViewer.GRAPHICS_MODE_320_240);
+			else
+				engine.main.fbViewer.setMode(FBViewer.TEXT_MODE);
+			break;
+		}
 	}
 }

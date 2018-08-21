@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
@@ -34,6 +35,8 @@ import emulator.util.IniFile;
 
 public class EmulatorMain extends JFrame {
 	private static final long serialVersionUID = 5554754132655656443L;
+	
+	public static final boolean DEBUG = false; 
 
 	final JFileChooser fc = new JFileChooser();
 
@@ -221,6 +224,10 @@ public class EmulatorMain extends JFrame {
 		setSize(new Dimension(ini.getInt("general", "width", 400), ini.getInt("general", "height", 700)));
 		setLocation(ini.getInt("general", "x", 1024), ini.getInt("general", "y", 0));
 
+		pack();
+		Insets insets = this.getInsets();
+		FBViewer.titleBarHeight = insets.top + 10;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}

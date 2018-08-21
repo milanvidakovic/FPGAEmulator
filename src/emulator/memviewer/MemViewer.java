@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import emulator.EmulatorMain;
 import emulator.engine.CpuContext;
 import emulator.engine.Engine;
 
@@ -53,7 +54,8 @@ public class MemViewer extends JFrame {
 	public void updateCell(int addr, short content) {
 		int row = addr / 8;
 		int col = (addr/2) % 4;
-		System.out.println("CHANGED MEMORY LOCATION CONTENT at addr: " + String.format("0x%04x", addr) + ", to: " + String.format("0x%04x", content));
+		if (EmulatorMain.DEBUG)
+			System.out.println("CHANGED MEMORY LOCATION CONTENT at addr: " + String.format("0x%04x", addr) + ", to: " + String.format("0x%04x", content));
 		memMdl.setValueAt(content, row, col);
 	}
 

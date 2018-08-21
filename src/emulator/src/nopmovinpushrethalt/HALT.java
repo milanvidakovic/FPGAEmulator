@@ -14,5 +14,6 @@ public class HALT extends Instruction {
 	public void exec(CpuContext ctx) {
 		//ctx.engine.halt();
 		//ctx.pc.val++;
+		try {Thread.sleep(100);} catch (Exception ex) {}
 	}
 }

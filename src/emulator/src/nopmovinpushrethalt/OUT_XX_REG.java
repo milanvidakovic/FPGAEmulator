@@ -12,7 +12,7 @@ public class OUT_XX_REG extends Instruction {
 
 	@Override
 	public void exec(CpuContext ctx) {
-		// TODO: implement OUT
+		ctx.toPort(this.argument, ctx.getReg(this.src).val);
 		ctx.pc.val += 4;
 	}
 }

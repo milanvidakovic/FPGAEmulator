@@ -146,7 +146,7 @@ public class Instruction {
 		
 		// C flag
 		if ((res & 0x10000) != 0) {
-			ctx.f.val |= 1;
+			ctx.f.val |= 2;
 		} else {
 			ctx.f.val &= 0xd;
 		}

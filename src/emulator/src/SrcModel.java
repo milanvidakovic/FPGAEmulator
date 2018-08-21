@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import emulator.EmulatorMain;
 import emulator.src.alu.ALU_B_REGX_MREGY;
 import emulator.src.alu.ALU_B_REGX_MREGY_XX;
 import emulator.src.alu.ALU_B_REG_MXX;
@@ -162,7 +163,8 @@ public class SrcModel extends AbstractTableModel {
 		for (int i = 0; i < words.length; i++) {
 			String w = words[i];
 			memory[addr++] = (short) Integer.parseInt(w, 16);
-			System.out.println((addr - 1) + ": " + w + " == " + memory[addr - 1]);
+			if (EmulatorMain.DEBUG)
+				System.out.println((addr - 1) + ": " + w + " == " + memory[addr - 1]);
 		}
 	}
 
@@ -577,7 +579,8 @@ public class SrcModel extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		System.out.println("SET BREAKPOINT AT: " + row);
+		if (EmulatorMain.DEBUG)
+			System.out.println("SET BREAKPOINT AT: " + row);
 		lines.get(row).breakPoint = (boolean) value;
 	}
 
