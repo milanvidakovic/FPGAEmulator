@@ -74,8 +74,8 @@ public class FBViewer extends JFrame {
 		if (mode == TEXT_MODE) {
 			if (addr >= Engine.VIDEO_OFFS && addr < (Engine.VIDEO_OFFS + 160 * 60)) {
 				int row = (addr - Engine.VIDEO_OFFS) / 160;
-				this.backgroundColors[addr - Engine.VIDEO_OFFS] = getColor((short) ((content >> 8) & 7));
-				this.foregroundColors[addr - Engine.VIDEO_OFFS] = getColor((short) (~((content >> 11) & 7)));
+				this.backgroundColors[addr - Engine.VIDEO_OFFS] = getTextColor((short) ((content >> 8) & 7));
+				this.foregroundColors[addr - Engine.VIDEO_OFFS] = getTextColor((short) (~((content >> 11) & 7)));
 				int fixed_addr = addr & 0xfffffffe;
 				int col = (fixed_addr % 160) / 2;
 				int c = (int) (content & 0xff);
@@ -134,6 +134,30 @@ public class FBViewer extends JFrame {
 		}
 		return new Insets(0, 0, 0, 0);
 	}
+	
+	private Color getTextColor(short col) {
+		int c = col & 7;
+		switch (c) {
+		case 0:
+			return Color.black;
+		case 1:
+			return Color.red;
+		case 2:
+			return Color.green;
+		case 3:
+			return new Color(255, 255, 0);
+		case 4:
+			return Color.blue;
+		case 5:
+			return new Color(255, 0, 255);
+		case 6:
+			return new Color(0, 255, 255);
+		case 7:
+			return Color.white;
+		default:
+			return Color.black;
+		}
+	}
 
 	private Color getColor(short col) {
 		int c = col & 7;
@@ -183,9 +207,9 @@ public class FBViewer extends JFrame {
 					int addr = Engine.VIDEO_OFFS + j * 160 + i * 2;
 					int c = (int) (memMdl.ctx.memory[addr / 2] & 0xff);
 
-					this.backgroundColors[addr - Engine.VIDEO_OFFS] = getColor(
+					this.backgroundColors[addr - Engine.VIDEO_OFFS] = getTextColor(
 							(short) ((memMdl.ctx.memory[addr / 2] >> 8) & 7));
-					this.foregroundColors[addr - Engine.VIDEO_OFFS] = getColor(
+					this.foregroundColors[addr - Engine.VIDEO_OFFS] = getTextColor(
 							(short) (~((memMdl.ctx.memory[addr / 2] >> 11) & 7)));
 
 					gr.setColor(this.backgroundColors[addr - Engine.VIDEO_OFFS]);
