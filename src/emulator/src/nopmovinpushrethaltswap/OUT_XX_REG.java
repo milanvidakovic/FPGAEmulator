@@ -1,4 +1,4 @@
-package emulator.src.nopmovinpushrethalt;
+package emulator.src.nopmovinpushrethaltswap;
 
 import emulator.engine.CpuContext;
 import emulator.src.Instruction;

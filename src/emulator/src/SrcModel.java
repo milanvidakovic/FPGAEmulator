@@ -20,12 +20,14 @@ import emulator.src.alu.ALU_REGX_REGY;
 import emulator.src.alu.ALU_REG_MXX;
 import emulator.src.alu.ALU_REG_XX;
 import emulator.src.call.CALLC_XX;
+import emulator.src.call.CALLG_XX;
 import emulator.src.call.CALLNC_XX;
 import emulator.src.call.CALLNO_XX;
 import emulator.src.call.CALLNP_XX;
 import emulator.src.call.CALLNZ_XX;
 import emulator.src.call.CALLO_XX;
 import emulator.src.call.CALLP_XX;
+import emulator.src.call.CALLSE_XX;
 import emulator.src.call.CALLZ_XX;
 import emulator.src.call.CALL_XX;
 import emulator.src.cmpneg.CMP_B_REGX_MREGY;
@@ -58,6 +60,7 @@ import emulator.src.incdec.INC_MREG_XX;
 import emulator.src.incdec.INC_MXX;
 import emulator.src.incdec.INC_REG;
 import emulator.src.jmp.JC_XX;
+import emulator.src.jmp.JG_XX;
 import emulator.src.jmp.JMP_XX;
 import emulator.src.jmp.JNC_XX;
 import emulator.src.jmp.JNO_XX;
@@ -65,6 +68,7 @@ import emulator.src.jmp.JNP_XX;
 import emulator.src.jmp.JNZ_XX;
 import emulator.src.jmp.JO_XX;
 import emulator.src.jmp.JP_XX;
+import emulator.src.jmp.JSE_XX;
 import emulator.src.jmp.JZ_XX;
 import emulator.src.loadstore.LD_B_REGX_MREGY;
 import emulator.src.loadstore.LD_B_REGX_MREGY_XX;
@@ -78,17 +82,18 @@ import emulator.src.loadstore.ST_B_MXX_REG;
 import emulator.src.loadstore.ST_MREGX_REGY;
 import emulator.src.loadstore.ST_MREGX_XX_REGY;
 import emulator.src.loadstore.ST_MXX_REG;
-import emulator.src.nopmovinpushrethalt.HALT;
-import emulator.src.nopmovinpushrethalt.IN_REG_XX;
-import emulator.src.nopmovinpushrethalt.IRET;
-import emulator.src.nopmovinpushrethalt.MOV_REGX_REGY;
-import emulator.src.nopmovinpushrethalt.MOV_REG_XX;
-import emulator.src.nopmovinpushrethalt.NOP;
-import emulator.src.nopmovinpushrethalt.OUT_XX_REG;
-import emulator.src.nopmovinpushrethalt.POP_REG;
-import emulator.src.nopmovinpushrethalt.PUSH_REG;
-import emulator.src.nopmovinpushrethalt.PUSH_XX;
-import emulator.src.nopmovinpushrethalt.RET;
+import emulator.src.nopmovinpushrethaltswap.HALT;
+import emulator.src.nopmovinpushrethaltswap.IN_REG_XX;
+import emulator.src.nopmovinpushrethaltswap.IRET;
+import emulator.src.nopmovinpushrethaltswap.MOV_REGX_REGY;
+import emulator.src.nopmovinpushrethaltswap.MOV_REG_XX;
+import emulator.src.nopmovinpushrethaltswap.NOP;
+import emulator.src.nopmovinpushrethaltswap.OUT_XX_REG;
+import emulator.src.nopmovinpushrethaltswap.POP_REG;
+import emulator.src.nopmovinpushrethaltswap.PUSH_REG;
+import emulator.src.nopmovinpushrethaltswap.PUSH_XX;
+import emulator.src.nopmovinpushrethaltswap.RET;
+import emulator.src.nopmovinpushrethaltswap.SWAP_REGX_REGY;
 
 public class SrcModel extends AbstractTableModel {
 	private static final long serialVersionUID = 8062097745546805165L;
@@ -215,6 +220,8 @@ public class SrcModel extends AbstractTableModel {
 				return new RET(memory, addr, src, dest);
 			case 9:
 				return new IRET(memory, addr, src, dest);
+			case 10:
+				return new SWAP_REGX_REGY(memory, addr, src, dest);
 			case 0xf:
 				return new HALT(memory, addr);
 			}
@@ -240,6 +247,10 @@ public class SrcModel extends AbstractTableModel {
 				return new JP_XX(memory, addr, src, dest);
 			case 8:
 				return new JNP_XX(memory, addr, src, dest);
+			case 9:
+				return new JG_XX(memory, addr, src, dest);
+			case 10:
+				return new JSE_XX(memory, addr, src, dest);
 			}
 		}
 		case 2: {
@@ -263,6 +274,10 @@ public class SrcModel extends AbstractTableModel {
 				return new CALLP_XX(memory, addr, src, dest);
 			case 8:
 				return new CALLNP_XX(memory, addr, src, dest);
+			case 9:
+				return new CALLG_XX(memory, addr, src, dest);
+			case 10:
+				return new CALLSE_XX(memory, addr, src, dest);
 			}
 		}
 		case 3: {

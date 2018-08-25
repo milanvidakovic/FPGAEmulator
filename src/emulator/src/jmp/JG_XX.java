@@ -3,17 +3,17 @@ package emulator.src.jmp;
 import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
-public class JP_XX extends Instruction {
-	public JP_XX(short[] memory, int addr, int src, int dest) {
+public class JG_XX extends Instruction {
+	public JG_XX(short[] memory, int addr, int src, int dest) {
 		super(memory, addr, 0, 0);
 		super.setArgument();
-		super.setAssembler("jp(jge) 0x%04x");
+		super.setAssembler("jg 0x%04x");
 		super.isJump = true;
 	}
 
 	@Override
 	public void exec(CpuContext ctx) {
-		if ((ctx.f.val & 0x8) != 0) {
+		if (((ctx.f.val & 0x8) != 0) && ((ctx.f.val & 0x1) == 0)) {
 			ctx.pc.val = this.argument;
 		} else {
 			ctx.pc.val += 4;

@@ -27,7 +27,7 @@ public class FBViewer extends JFrame {
 
 	BufferedImage img;
 	Graphics2D gr;
-	Rectangle rect;
+	//Rectangle rect;
 	Font font = new Font("Monospaced", Font.PLAIN, 15);
 
 	public JLabel display = new JLabel();
@@ -64,7 +64,7 @@ public class FBViewer extends JFrame {
 		gr = img.createGraphics();
 		gr.setFont(this.font);
 
-		rect = new Rectangle(0, 0, this.getWidth(), this.getHeight());
+		//rect = new Rectangle(0, 0, this.getWidth(), this.getHeight());
 		setLocation(ctx.engine.main.ini.getInt("FB", "x", 1024), ctx.engine.main.ini.getInt("fb", "y", 0));
 
 		setVisible(true);
@@ -91,25 +91,19 @@ public class FBViewer extends JFrame {
 
 				if (EmulatorMain.DEBUG) {
 					System.out.println("(" + row + ", " + col + "): " + String.format("%c", c));
-					System.out.println("Foreground Color: " + this.foregroundColors[addr]);
-					System.out.println("Background Color: " + this.backgroundColors[addr]);
+					System.out.println("Foreground Color: " + this.foregroundColors[addr - Engine.VIDEO_OFFS]);
+					System.out.println("Background Color: " + this.backgroundColors[addr - Engine.VIDEO_OFFS]);
 				}
 			}
 		} else if (mode == GRAPHICS_MODE_320_240) {
-			if (addr >= Engine.VIDEO_OFFS && addr < (Engine.VIDEO_OFFS + 320 * 240)) {
-				Color p1 = getColor((short) ((content >> 12) & 7));
-				Color p2 = getColor((short) ((content >> 8) & 7));
-				Color p3 = getColor((short) ((content >> 4) & 7));
-				Color p4 = getColor((short) ((content) & 7));
+			if (addr >= Engine.VIDEO_OFFS && addr < (Engine.VIDEO_OFFS + (320 * 240) / 2)) {
+				Color p1 = getColor((short) ((content >> 4) & 7));
+				Color p2 = getColor((short) ((content) & 7));
 				Insets pixel = getCoordinate(addr);
 				gr.setColor(p1);
-				gr.fillRect(pixel.left * 2 + 0, pixel.top * 2 + titleBarHeight, 2, 2);
+				gr.fillRect(pixel.left * 2 + 8, pixel.top * 2 + titleBarHeight, 2, 2);
 				gr.setColor(p2);
-				gr.fillRect(pixel.left * 2 + 2, pixel.top * 2 + titleBarHeight, 2, 2);
-				gr.setColor(p3);
-				gr.fillRect(pixel.left * 2 + 4, pixel.top * 2 + titleBarHeight, 2, 2);
-				gr.setColor(p4);
-				gr.fillRect(pixel.left * 2 + 6, pixel.top * 2 + titleBarHeight, 2, 2);
+				gr.fillRect(pixel.left * 2 + 10, pixel.top * 2 + titleBarHeight, 2, 2);
 
 				Graphics2D g2 = (Graphics2D) getGraphics();
 				g2.drawImage(img, null, 0, 0);
@@ -117,8 +111,6 @@ public class FBViewer extends JFrame {
 				if (EmulatorMain.DEBUG) {
 					System.out.println("(" + (pixel.left + 0) + ", " + (pixel.top) + "): " + p1);
 					System.out.println("(" + (pixel.left + 1) + ", " + (pixel.top) + "): " + p2);
-					System.out.println("(" + (pixel.left + 2) + ", " + (pixel.top) + "): " + p3);
-					System.out.println("(" + (pixel.left + 3) + ", " + (pixel.top) + "): " + p4);
 				}
 			}
 		}
@@ -194,59 +186,6 @@ public class FBViewer extends JFrame {
 		if (EmulatorMain.DEBUG)
 			System.out.println("REPAINT");
 		Graphics2D g2 = (Graphics2D) g;
-		int height = img.getHeight();
-		int width = img.getWidth();
-
-		gr.setColor(Color.black);
-		gr.fillRect(0, 0, width, height);
-
-		if (mode == TEXT_MODE) {
-
-			for (int i = 0; i < 80; i++) {
-				for (int j = 0; j < 60; j++) {
-					int addr = Engine.VIDEO_OFFS + j * 160 + i * 2;
-					int c = (int) (memMdl.ctx.memory[addr / 2] & 0xff);
-
-					this.backgroundColors[addr - Engine.VIDEO_OFFS] = getTextColor(
-							(short) ((memMdl.ctx.memory[addr / 2] >> 8) & 7));
-					this.foregroundColors[addr - Engine.VIDEO_OFFS] = getTextColor(
-							(short) (~((memMdl.ctx.memory[addr / 2] >> 11) & 7)));
-
-					gr.setColor(this.backgroundColors[addr - Engine.VIDEO_OFFS]);
-					gr.fillRect(10 + i * 10, titleBarHeight - 5 + j * 10, 10, 10);
-
-					gr.setColor(this.foregroundColors[addr - Engine.VIDEO_OFFS]);
-					gr.drawString("" + String.format("%c", c), 10 + i * 10, titleBarHeight + 5 + j * 10);
-				}
-			}
-		} else if (mode == GRAPHICS_MODE_320_240) {
-			for (int i = 0; i < 80; i++) {
-				for (int j = 0; j < 240; j++) {
-					int addr = Engine.VIDEO_OFFS + j * 160 + i * 2;
-					short content = memMdl.ctx.memory[addr / 2];
-					Color p1 = getColor((short) ((content >> 12) & 7));
-					Color p2 = getColor((short) ((content >> 8) & 7));
-					Color p3 = getColor((short) ((content >> 4) & 7));
-					Color p4 = getColor((short) ((content) & 7));
-					Insets pixel = getCoordinate(addr);
-					gr.setColor(p1);
-					gr.fillRect(pixel.left * 2 + 0, pixel.top * 2 + titleBarHeight, 2, 2);
-					gr.setColor(p2);
-					gr.fillRect(pixel.left * 2 + 2, pixel.top * 2 + titleBarHeight, 2, 2);
-					gr.setColor(p3);
-					gr.fillRect(pixel.left * 2 + 4, pixel.top * 2 + titleBarHeight, 2, 2);
-					gr.setColor(p4);
-					gr.fillRect(pixel.left * 2 + 6, pixel.top * 2 + titleBarHeight, 2, 2);
-
-					if (EmulatorMain.DEBUG) {
-						System.out.println("(" + (pixel.left + 0) + ", " + (pixel.top) + "): " + p1);
-						System.out.println("(" + (pixel.left + 1) + ", " + (pixel.top) + "): " + p2);
-						System.out.println("(" + (pixel.left + 2) + ", " + (pixel.top) + "): " + p3);
-						System.out.println("(" + (pixel.left + 3) + ", " + (pixel.top) + "): " + p4);
-					}
-				}
-			}
-		}
 		g2.drawImage(img, null, 0, 0);
 	}
 

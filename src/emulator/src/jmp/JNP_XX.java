@@ -7,7 +7,7 @@ public class JNP_XX extends Instruction {
 	public JNP_XX(short[] memory, int addr, int src, int dest) {
 		super(memory, addr, 0, 0);
 		super.setArgument();
-		super.setAssembler("jnp 0x%04x");
+		super.setAssembler("jnp(js) 0x%04x");
 		super.isJump = true;
 	}
 

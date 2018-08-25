@@ -21,10 +21,10 @@ public class Engine {
 	private MemViewer sfViewer;
 	private FBViewer fbViewer;
 	private boolean halted;
-	
+
 	public static short IRQ1_ADDR = 16;
 	public static boolean irq1 = false;
-	
+
 	public static int VIDEO_OFFS = 2400;
 
 	public Engine(CpuContext ctx, EmulatorMain main) {
@@ -120,7 +120,7 @@ public class Engine {
 		// Jump to the IRQ1 handler
 		ctx.pc.val = Engine.IRQ1_ADDR;
 		Engine.irq1 = false;
-		
+
 		if (ctx.mdl.addr_instr[Engine.IRQ1_ADDR].assembler.equals("nop")) {
 			Instruction instr = ctx.mdl.getInstruction(ctx.memory, Engine.IRQ1_ADDR);
 			instr.setContent();
@@ -129,7 +129,7 @@ public class Engine {
 			ctx.mdl.addr_instr[Engine.IRQ1_ADDR] = instr;
 		}
 	}
-	
+
 	public void stepInto() throws NotImplementedException {
 		if (!halted) {
 			if (Engine.irq1) {
@@ -200,21 +200,23 @@ public class Engine {
 	public void setSfViewer(MemViewer sfViewer) {
 		this.sfViewer = sfViewer;
 	}
-	
+
 	public void setFBViewer(FBViewer fbViewer) {
 		this.fbViewer = fbViewer;
 	}
 
 	public void updateViewer(int addr, short content) {
-		memViewer.updateCell(addr, content);
-		sfViewer.updateCell(addr, content);
 		fbViewer.updateCell(addr, content);
-		
-		sfViewer.tblMem.setRowSelectionInterval(addr / 8, addr / 8);
-		sfViewer.tblMem.setColumnSelectionInterval(((addr/2) % 4)/2 + 1, ((addr/2) % 4)/2 + 1);
-		sfViewer.tblMem.scrollRectToVisible(sfViewer.tblMem.getCellRect(addr / 8, 0, true));
-		sfViewer.src.revalidate();
-		sfViewer.src.repaint();
+		if (EmulatorMain.DEBUG) {
+			memViewer.updateCell(addr, content);
+			sfViewer.updateCell(addr, content);
+
+			sfViewer.tblMem.setRowSelectionInterval(addr / 8, addr / 8);
+			sfViewer.tblMem.setColumnSelectionInterval(((addr / 2) % 4) / 2 + 1, ((addr / 2) % 4) / 2 + 1);
+			sfViewer.tblMem.scrollRectToVisible(sfViewer.tblMem.getCellRect(addr / 8, 0, true));
+			sfViewer.src.revalidate();
+			sfViewer.src.repaint();
+		}
 	}
 
 	public void halt() {
