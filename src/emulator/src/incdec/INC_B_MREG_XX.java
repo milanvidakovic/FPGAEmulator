@@ -34,6 +34,6 @@ public class INC_B_MREG_XX extends Instruction {
 
 		markFlags(res, (short)res, ctx);
 		ctx.pc.val += 4;
-		updateViewer(ctx, fix(ctx.getReg(this.dest).val + this.argument), (short)res);
+		updateViewer(ctx, fix(ctx.getReg(this.dest).val + this.argument), content);
 	}
 }

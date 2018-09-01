@@ -17,5 +17,8 @@ public class IRET extends Instruction {
 		ctx.sp.val -=2;
 		ctx.f.val = ctx.memory[fix(ctx.sp.val) / 2];
 		Engine.irq1 = false;
+		Engine.irq2_pressed = false;
+		Engine.irq2_released = false;
+		Engine.inIrq = false;
 	}
 }

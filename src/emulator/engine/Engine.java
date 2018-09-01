@@ -22,10 +22,14 @@ public class Engine {
 	private FBViewer fbViewer;
 	private boolean halted;
 
+	public static boolean inIrq = false; 
 	public static short IRQ1_ADDR = 16;
 	public static boolean irq1 = false;
+	public static short IRQ2_PRESSED_ADDR = 32;
+	public static short IRQ2_RELEASED_ADDR = 40;
+	public static boolean irq2_pressed = false, irq2_released = false;
 
-	public static int VIDEO_OFFS = 2400;
+	public static int VIDEO_OFFS = 26880;
 
 	public Engine(CpuContext ctx, EmulatorMain main) {
 		this.ctx = ctx;
@@ -76,7 +80,8 @@ public class Engine {
 					if (halted) {
 						break;
 					}
-					if (Engine.irq1) {
+					if (!inIrq && (Engine.irq1 || Engine.irq2_pressed || Engine.irq2_released)) {
+						inIrq = true;
 						prepareIrq();
 					}
 					Instruction i = ctx.mdl.addr_instr[Instruction.fix(ctx.pc.val)];
@@ -117,16 +122,33 @@ public class Engine {
 		// Push PC
 		ctx.memory[Instruction.fix(ctx.sp.val) / 2] = ctx.pc.val;
 		ctx.sp.val += 2;
-		// Jump to the IRQ1 handler
-		ctx.pc.val = Engine.IRQ1_ADDR;
-		Engine.irq1 = false;
-
-		if (ctx.mdl.addr_instr[Engine.IRQ1_ADDR].assembler.equals("nop")) {
+		if (Engine.irq1) {
+			// Jump to the IRQ1 handler
+			ctx.pc.val = Engine.IRQ1_ADDR;
 			Instruction instr = ctx.mdl.getInstruction(ctx.memory, Engine.IRQ1_ADDR);
 			instr.setContent();
 			ctx.mdl.lines.set(Engine.IRQ1_ADDR, instr);
 			instr.tableLine = Engine.IRQ1_ADDR;
 			ctx.mdl.addr_instr[Engine.IRQ1_ADDR] = instr;
+			Engine.irq1 = false;
+		} else if (Engine.irq2_pressed) {
+			// Jump to the IRQ2 pressed handler
+			ctx.pc.val = Engine.IRQ2_PRESSED_ADDR;
+			Instruction instr = ctx.mdl.getInstruction(ctx.memory, Engine.IRQ2_PRESSED_ADDR);
+			instr.setContent();
+			ctx.mdl.lines.set(Engine.IRQ2_PRESSED_ADDR, instr);
+			instr.tableLine = Engine.IRQ2_PRESSED_ADDR;
+			ctx.mdl.addr_instr[Engine.IRQ2_PRESSED_ADDR] = instr;
+			Engine.irq2_pressed = false;
+		} else if (Engine.irq2_released) {
+			// Jump to the IRQ2 released handler
+			ctx.pc.val = Engine.IRQ2_RELEASED_ADDR;
+			Instruction instr = ctx.mdl.getInstruction(ctx.memory, Engine.IRQ2_RELEASED_ADDR);
+			instr.setContent();
+			ctx.mdl.lines.set(Engine.IRQ2_RELEASED_ADDR, instr);
+			instr.tableLine = Engine.IRQ2_RELEASED_ADDR;
+			ctx.mdl.addr_instr[Engine.IRQ2_RELEASED_ADDR] = instr;
+			Engine.irq2_released = false;
 		}
 	}
 

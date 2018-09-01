@@ -33,6 +33,6 @@ public class DEC_B_MREG extends Instruction {
 
 		markFlags(res, (short)res, ctx);
 		ctx.pc.val += 2;
-		updateViewer(ctx, fix(ctx.getReg(this.dest).val), (short)res);
+		updateViewer(ctx, fix(ctx.getReg(this.dest).val), content);
 	}
 }

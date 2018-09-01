@@ -24,6 +24,6 @@ public class ST_B_MXX_REG extends Instruction {
 		ctx.memory[fixedAddr / 2] = content;
 		
 		ctx.pc.val += 4;
-		updateViewer(ctx, fix(this.argument), ctx.getReg(this.dest).val);
+		updateViewer(ctx, fix(this.argument), content);
 	}
 }
