@@ -93,10 +93,22 @@ public class CpuContext {
 			// UART byte
 			return uart;
 		}
+		case 69: { 
+			if (lastMillis < System.currentTimeMillis()) {
+				lastMillis = System.currentTimeMillis();
+				return millis++;
+			} else {
+				return millis;
+			}
+		}
 		}
 		return 0;
 	}
-	
+
+	private long lastMillis = 0;
+
+	private static short millis = 0;
+
 	public void toPort(short port, int value) {
 		switch (port) {
 		case 128:

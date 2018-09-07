@@ -405,10 +405,11 @@ public class FBViewer extends JFrame {
 				int c = (int) (content & 0xff);
 
 				gr.setColor(this.backgroundColors[addr - Engine.VIDEO_OFFS]);
-				gr.fillRect(10 + col * 11, titleBarHeight - 5 + row * 11, 10, 10);
+				gr.fillRect(10 + col * 11, titleBarHeight - 5 + row * 11, 10, 11);
 
 				gr.setColor(this.foregroundColors[addr - Engine.VIDEO_OFFS]);
-				gr.drawString("" + String.format("%c", c), 10 + col * 11, titleBarHeight + 5 + row * 11);
+				if (c != 32)
+					gr.drawString("" + String.format("%c", c), 10 + col * 11, titleBarHeight + 5 + row * 11);
 
 				Graphics2D g2 = (Graphics2D) getGraphics();
 				g2.drawImage(img, null, 0, 0);

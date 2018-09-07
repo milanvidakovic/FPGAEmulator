@@ -36,7 +36,7 @@ import emulator.util.IniFile;
 public class EmulatorMain extends JFrame {
 	private static final long serialVersionUID = 5554754132655656443L;
 	
-	public static final boolean DEBUG = true; 
+	public static final boolean DEBUG = false; 
 
 	final JFileChooser fc = new JFileChooser();
 

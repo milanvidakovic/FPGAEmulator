@@ -95,7 +95,8 @@ public class Engine {
 						ex.printStackTrace();
 						throw new Exception(ex.getMessage());
 					}
-					publish(i);
+					if (EmulatorMain.DEBUG)
+						publish(i);
 				}
 				return null;
 			}
