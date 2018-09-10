@@ -17,6 +17,7 @@ import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -36,7 +37,7 @@ import emulator.util.IniFile;
 public class EmulatorMain extends JFrame {
 	private static final long serialVersionUID = 5554754132655656443L;
 	
-	public static final boolean DEBUG = false; 
+	public static boolean DEBUG = false; 
 
 	final JFileChooser fc = new JFileChooser();
 
@@ -47,6 +48,7 @@ public class EmulatorMain extends JFrame {
 	public JButton btnStepOver = new JButton("Step over");
 	public JButton btnReset = new JButton("Reset");
 	public JButton btnExit = new JButton("Exit");
+	JCheckBox chbDebug = new JCheckBox("Debug");
 
 	public JScrollPane src;
 	public JTable tblSrc;
@@ -150,6 +152,19 @@ public class EmulatorMain extends JFrame {
 		btnStop.addActionListener(e -> eng.stop());
 		btnStop.setToolTipText("ESC");
 		btnStop.setEnabled(false);
+		int debugEnabled = ini.getInt("general", "debug", 1);
+		EmulatorMain.DEBUG = debugEnabled == 1;
+		chbDebug.setSelected(DEBUG);
+		chbDebug.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (chbDebug.isSelected())
+					EmulatorMain.DEBUG = true;
+				else 
+					EmulatorMain.DEBUG = false;
+			}
+		});
+		commands.add(chbDebug);
 		commands.add(Box.createHorizontalStrut(50));
 
 		commands.add(btnStepOver);
@@ -183,7 +198,7 @@ public class EmulatorMain extends JFrame {
 		commands.add(Box.createHorizontalStrut(100));
 		commands.add(btnExit);
 		btnExit.addActionListener(e -> {
-			saveWindows();
+			saveSettings();
 			System.exit(0);
 		});
 		getContentPane().add(commands, BorderLayout.SOUTH);
@@ -232,7 +247,7 @@ public class EmulatorMain extends JFrame {
 		setVisible(true);
 	}
 
-	private void saveWindows() {
+	private void saveSettings() {
 		if (memViewer != null) {
 			ini.setInt("MemViewer", "width", memViewer.getWidth());
 			ini.setInt("MemViewer", "height", memViewer.getHeight());
@@ -255,6 +270,7 @@ public class EmulatorMain extends JFrame {
 		ini.setInt("general", "height", getHeight());
 		ini.setInt("general", "x", getX());
 		ini.setInt("general", "y", getY());
+		ini.setInt("general", "debug", DEBUG?1:0);
 		ini.saveINI();
 	}
 
