@@ -98,6 +98,7 @@ public class CpuContext {
 				lastMillis = System.currentTimeMillis();
 				return millis++;
 			} else {
+				lastMillis = System.currentTimeMillis();
 				return millis;
 			}
 		}

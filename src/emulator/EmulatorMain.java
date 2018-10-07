@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileFilter;
 
 import emulator.engine.CpuContext;
 import emulator.engine.Engine;
@@ -278,6 +279,18 @@ public class EmulatorMain extends JFrame {
 	 * Loading machine code into the memory.
 	 */
 	private void loadProg() {
+		fc.setFileFilter(new FileFilter() {
+			@Override
+			public boolean accept(File f) {
+				if (f.getName().endsWith(".bin"))
+					return true;
+				return false;
+			}
+			@Override
+			public String getDescription() {
+				return null;
+			}
+		});
 		fc.setCurrentDirectory(new File(ini.getString("general", "startDir", ".")));
 		int returnVal = fc.showOpenDialog(this);
 
