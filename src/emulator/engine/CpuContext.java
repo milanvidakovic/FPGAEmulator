@@ -94,21 +94,17 @@ public class CpuContext {
 			return uart;
 		}
 		case 69: { 
-			if (lastMillis < System.currentTimeMillis()) {
-				lastMillis = System.currentTimeMillis();
-				return millis++;
-			} else {
-				lastMillis = System.currentTimeMillis();
-				return millis;
-			}
+			while (System.nanoTime() - lastNano < 1000000) ;
+			lastNano = System.nanoTime();
+			return millis++;
 		}
 		}
 		return 0;
 	}
 
-	private long lastMillis = 0;
+	private long lastNano = System.nanoTime();
 
-	private static short millis = 0;
+	private static short millis = (short)System.currentTimeMillis();
 
 	public void toPort(short port, int value) {
 		switch (port) {
