@@ -5,7 +5,7 @@ import org.junit.Test;
 import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 import emulator.src.alu.ALU_REGX_REGY;
-import emulator.src.cmpneg.NEG_REG;
+import emulator.src.cmpneg.INV_REG;
 
 
 public class TestAndOrXor {
@@ -40,7 +40,7 @@ public class TestAndOrXor {
 	public void testNEG_A() {
 		CpuContext ctx = new CpuContext();
 		int src = 0;
-		NEG_REG n = new NEG_REG(new short[2], 1, src, 0);
+		INV_REG n = new INV_REG(new short[2], 1, src, 0);
 		ctx.getReg(src).val = 1;
 		n.exec(ctx);
 		assert (ctx.getReg(src).val == (short)-2);

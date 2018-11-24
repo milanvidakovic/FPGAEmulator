@@ -94,7 +94,7 @@ public class CpuContext {
 			return uart;
 		}
 		case 69: { 
-			while (System.nanoTime() - lastNano < 1000000) ;
+			while (System.nanoTime() - lastNano < 500000) ;
 			lastNano = System.nanoTime();
 			return millis++;
 		}

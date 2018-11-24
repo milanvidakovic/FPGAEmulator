@@ -19,6 +19,13 @@ import emulator.src.alu.ALU_REGX_MREGY_XX;
 import emulator.src.alu.ALU_REGX_REGY;
 import emulator.src.alu.ALU_REG_MXX;
 import emulator.src.alu.ALU_REG_XX;
+import emulator.src.alu.NEG_B_MREG;
+import emulator.src.alu.NEG_B_MREG_XX;
+import emulator.src.alu.NEG_B_MXX;
+import emulator.src.alu.NEG_MREG;
+import emulator.src.alu.NEG_MREG_XX;
+import emulator.src.alu.NEG_MXX;
+import emulator.src.alu.NEG_REG;
 import emulator.src.call.CALLC_XX;
 import emulator.src.call.CALLG_XX;
 import emulator.src.call.CALLNC_XX;
@@ -38,13 +45,13 @@ import emulator.src.cmpneg.CMP_REGX_MREGY_XX;
 import emulator.src.cmpneg.CMP_REGX_REGY;
 import emulator.src.cmpneg.CMP_REG_MXX;
 import emulator.src.cmpneg.CMP_REG_XX;
-import emulator.src.cmpneg.NEG_B_MREG;
-import emulator.src.cmpneg.NEG_B_MREG_XX;
-import emulator.src.cmpneg.NEG_B_MXX;
-import emulator.src.cmpneg.NEG_MREG;
-import emulator.src.cmpneg.NEG_MREG_XX;
-import emulator.src.cmpneg.NEG_MXX;
-import emulator.src.cmpneg.NEG_REG;
+import emulator.src.cmpneg.INV_B_MREG;
+import emulator.src.cmpneg.INV_B_MREG_XX;
+import emulator.src.cmpneg.INV_B_MXX;
+import emulator.src.cmpneg.INV_MREG;
+import emulator.src.cmpneg.INV_MREG_XX;
+import emulator.src.cmpneg.INV_MXX;
+import emulator.src.cmpneg.INV_REG;
 import emulator.src.incdec.DEC_B_MREG;
 import emulator.src.incdec.DEC_B_MREG_XX;
 import emulator.src.incdec.DEC_B_MXX;
@@ -384,7 +391,7 @@ public class SrcModel extends AbstractTableModel {
 			}
 		}
 		case 6: {
-			// XOR GROUP
+			// XOR/NEG GROUP
 			switch (group) {
 			case 0:
 				return new ALU_REGX_REGY(memory, addr, src, dest, Instruction.XOR);
@@ -402,6 +409,20 @@ public class SrcModel extends AbstractTableModel {
 				return new ALU_B_REG_MXX(memory, addr, src, dest, Instruction.XOR_B);
 			case 7:
 				return new ALU_B_REGX_MREGY_XX(memory, addr, src, dest, Instruction.XOR_B);
+			case 8:
+				return new NEG_REG(memory, addr, src, dest);
+			case 10:
+				return new NEG_MREG(memory, addr, src, dest);
+			case 11:
+				return new NEG_MXX(memory, addr, src, dest);
+			case 12:
+				return new NEG_MREG_XX(memory, addr, src, dest);
+			case 13:
+				return new NEG_B_MREG(memory, addr, src, dest);
+			case 14:
+				return new NEG_B_MXX(memory, addr, src, dest);
+			case 15:
+				return new NEG_B_MREG_XX(memory, addr, src, dest);
 			}
 		}
 		case 7: {
@@ -531,19 +552,19 @@ public class SrcModel extends AbstractTableModel {
 			case 7:
 				return new CMP_B_REGX_MREGY_XX(memory, addr, src, dest);
 			case 8:
-				return new NEG_REG(memory, addr, src, dest);
+				return new INV_REG(memory, addr, src, dest);
 			case 9:
-				return new NEG_MREG(memory, addr, src, dest);
+				return new INV_MREG(memory, addr, src, dest);
 			case 10:
-				return new NEG_MXX(memory, addr, src, dest);
+				return new INV_MXX(memory, addr, src, dest);
 			case 11:
-				return new NEG_MREG_XX(memory, addr, src, dest);
+				return new INV_MREG_XX(memory, addr, src, dest);
 			case 12:
-				return new NEG_B_MREG(memory, addr, src, dest);
+				return new INV_B_MREG(memory, addr, src, dest);
 			case 13:
-				return new NEG_B_MXX(memory, addr, src, dest);
+				return new INV_B_MXX(memory, addr, src, dest);
 			case 14:
-				return new NEG_B_MREG_XX(memory, addr, src, dest);
+				return new INV_B_MREG_XX(memory, addr, src, dest);
 			}
 		}
 		}

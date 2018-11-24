@@ -1,4 +1,4 @@
-package emulator.src.cmpneg;
+package emulator.src.alu;
 
 import emulator.engine.CpuContext;
 import emulator.src.Instruction;
@@ -11,7 +11,7 @@ public class NEG_MREG extends Instruction {
 
 	@Override
 	public void exec(CpuContext ctx) {
-		int res = ~ctx.memory[fix(ctx.getReg(this.dest).val) / 2];
+		int res = -ctx.memory[fix(ctx.getReg(this.dest).val) / 2];
 		ctx.memory[fix(ctx.getReg(this.dest).val) / 2] = (short)res;
 		markFlags(res, (short)res, ctx);
 		ctx.pc.val += 2;

@@ -1,4 +1,4 @@
-package emulator.src.cmpneg;
+package emulator.src.alu;
 
 import emulator.engine.CpuContext;
 import emulator.src.Instruction;
@@ -18,7 +18,7 @@ public class NEG_B_MREG extends Instruction {
 		else
 			operand = (short)(ctx.memory[fixedAddr / 2] & 255);		
 		
-		int res = ~operand;
+		int res = -operand;
 
 		short content = ctx.memory[fixedAddr / 2];
 		if ((fixedAddr & 1) == 0) {

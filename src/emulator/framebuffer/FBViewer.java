@@ -1,34 +1,47 @@
 package emulator.framebuffer;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
+import java.awt.image.RGBImageFilter;
 import java.lang.reflect.Field;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
 import emulator.EmulatorMain;
 import emulator.engine.CpuContext;
 import emulator.engine.Engine;
+import emulator.util.WindowUtil;
 
 public class FBViewer extends JFrame {
 	private static final long serialVersionUID = -5500314457803056242L;
 	public static final int TEXT_MODE = 0;
 	public static final int GRAPHICS_MODE_320_240 = 1;
+	protected static final int SPRITE_COUNT = 3;
+	protected static final int SPRITE_DEF_START = 56;
 
 	public FBModel memMdl;
 
 	BufferedImage img;
 	Graphics2D gr;
-	// Rectangle rect;
-	Font font = new Font("Monospaced", Font.PLAIN, 15);
+
+	private SpriteDef[] spriteDef;
+
+	Font font = new Font(Font.MONOSPACED, Font.PLAIN, 15);
 
 	public JLabel display = new JLabel();
 
@@ -48,13 +61,6 @@ public class FBViewer extends JFrame {
 		this.foregroundColors = new Color[160 * 60];
 
 		this.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-//				ctx.uart = (byte) e.getKeyChar();
-//				if (EmulatorMain.DEBUG)
-//					System.out.println("UART received: " + ctx.uart);
-//				Engine.irq1 = true;
-			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -78,17 +84,108 @@ public class FBViewer extends JFrame {
 			}
 		});
 
-		setSize(new Dimension(ctx.engine.main.ini.getInt("FB", "width", 400),
-				ctx.engine.main.ini.getInt("FB", "height", 700)));
+		WindowUtil.setLocation(ctx.engine.main.ini.getInt("FB", "x", 1024), ctx.engine.main.ini.getInt("FB", "y", 100),
+				ctx.engine.main.ini.getInt("FB", "width", 400), ctx.engine.main.ini.getInt("FB", "height", 700), this);
 
 		img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
 		gr = img.createGraphics();
 		gr.setFont(this.font);
 
-		// rect = new Rectangle(0, 0, this.getWidth(), this.getHeight());
-		setLocation(ctx.engine.main.ini.getInt("FB", "x", 1024), ctx.engine.main.ini.getInt("fb", "y", 0));
+		spriteDef = new SpriteDef[SPRITE_COUNT];
+		for (int i = 0; i < SPRITE_COUNT; i++) {
+			spriteDef[i] = new SpriteDef();
+		}
+
+		Timer t = new Timer(120, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (FBViewer.this.mode == GRAPHICS_MODE_320_240) {
+					for (int i = 0; i < SPRITE_COUNT; i++) {
+						if (ctx.memory[(SPRITE_DEF_START + i * 8) / 2] != 0) {
+							int oldaddr = spriteDef[i].spriteAddr;
+							int oldx = spriteDef[i].x;
+							int oldy = spriteDef[i].y;
+							spriteDef[i].spriteAddr = ctx.memory[(SPRITE_DEF_START + i * 8) / 2];
+							spriteDef[i].x = ctx.memory[(SPRITE_DEF_START + i * 8 + 2) / 2];
+							spriteDef[i].y = ctx.memory[(SPRITE_DEF_START + i * 8 + 4) / 2];
+							spriteDef[i].transparentColor = getColor(ctx.memory[(SPRITE_DEF_START + i * 8 + 6) / 2]);
+							
+							if (oldaddr != spriteDef[i].spriteAddr) {
+								fillSprite(spriteDef[i], ctx);
+								spriteDef[i].img = makeColorTransparent(spriteDef[i].img, spriteDef[i].transparentColor);
+							}
+							
+							if (oldx != spriteDef[i].x || oldy != spriteDef[i].y) {
+								if (FBViewer.this.getGraphics() != null)
+									FBViewer.this.getGraphics().drawImage(img, 
+										oldx * 2 + 8, oldy * 2 + titleBarHeight,
+										oldx * 2 + 8 + 32, oldy * 2 + titleBarHeight + 32,
+										oldx * 2 + 8, oldy * 2 + titleBarHeight,
+										oldx * 2 + 8 + 32, oldy * 2 + titleBarHeight + 32,
+										null);
+							}
+							if (oldaddr != spriteDef[i].spriteAddr || oldx != spriteDef[i].x || oldy != spriteDef[i].y) {
+								if (FBViewer.this.getGraphics() != null)
+									FBViewer.this.getGraphics().drawImage(spriteDef[i].img,
+											spriteDef[i].x * 2 + 8, spriteDef[i].y * 2 + titleBarHeight, null);
+							}
+						}
+					}
+				}
+			}
+		});
+		t.start();
 
 		setVisible(true);
+	}
+
+	public static Image makeColorTransparent(Image im, final Color color) {
+	    ImageFilter filter = new RGBImageFilter() {
+
+	        // the color we are looking for... Alpha bits are set to opaque
+	        public int markerRGB = color.getRGB() | 0xFF000000;
+
+	        public final int filterRGB(int x, int y, int rgb) {
+	            if ((rgb | 0xFF000000) == markerRGB) {
+	                // Mark the alpha bits as zero - transparent
+	                return 0x00FFFFFF & rgb;
+	            } else {
+	                // nothing to do
+	                return rgb;
+	            }
+	        }
+	    };
+
+	    ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
+	    return Toolkit.getDefaultToolkit().createImage(ip);
+	}
+	
+	protected void fillSprite(SpriteDef sp, CpuContext ctx) {
+		Color p1, p2, p3, p4;
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j < 4; j++) {
+				int addr = sp.spriteAddr + i * 8 + j*2;
+				short content = ctx.memory[addr / 2];
+				p1 = getColor((short) ((content >> 12) & 7));
+				p2 = getColor((short) ((content >> 8) & 7));
+				p3 = getColor((short) ((content >> 4) & 7));
+				p4 = getColor((short) ((content) & 7));
+				Insets pixel = new Insets(i, j * 4, 0, 0);
+				drawSpritePixels(sp.gr, p1, p2, p3, p4, pixel);
+			}
+		}
+	}
+	
+	private void drawSpritePixels(Graphics2D gr, Color p1, Color p2, Color p3, Color p4, Insets pixel) {
+		gr.setColor(p1);
+		gr.fillRect(pixel.left * 2 , pixel.top * 2, 2, 2);
+		gr.setColor(p2);
+		gr.fillRect(pixel.left * 2 + 2, pixel.top * 2, 2, 2);
+		gr.setColor(p3);
+		gr.fillRect(pixel.left * 2 + 4, pixel.top * 2, 2, 2);
+		gr.setColor(p4);
+		gr.fillRect(pixel.left * 2 + 6, pixel.top * 2, 2, 2);
 	}
 
 	final public static Integer getScancodeFromKeyEvent(final KeyEvent keyEvent) {
@@ -404,15 +501,10 @@ public class FBViewer extends JFrame {
 				int col = (fixed_addr % 160) / 2;
 				int c = (int) (content & 0xff);
 
-				gr.setColor(this.backgroundColors[addr - Engine.VIDEO_OFFS]);
-				gr.fillRect(10 + col * 11, titleBarHeight - 5 + row * 11, 10, 11);
-
-				gr.setColor(this.foregroundColors[addr - Engine.VIDEO_OFFS]);
-				if (c != 32)
-					gr.drawString("" + String.format("%c", c), 10 + col * 11, titleBarHeight + 5 + row * 11);
-
 				Graphics2D g2 = (Graphics2D) getGraphics();
-				g2.drawImage(img, null, 0, 0);
+
+				drawChar(g2, addr, row, col, c);
+				drawChar(gr, addr, row, col, c);
 
 				if (EmulatorMain.DEBUG) {
 					System.out.println("(" + col + ", " + row + "): " + String.format("%c", c));
@@ -436,17 +528,12 @@ public class FBViewer extends JFrame {
 					p4 = getColor((short) ((content) & 7));
 				}
 				Insets pixel = getCoordinate(addr);
-				gr.setColor(p1);
-				gr.fillRect(pixel.left * 2 + 8, pixel.top * 2 + titleBarHeight, 2, 2);
-				gr.setColor(p2);
-				gr.fillRect(pixel.left * 2 + 10, pixel.top * 2 + titleBarHeight, 2, 2);
-				gr.setColor(p3);
-				gr.fillRect(pixel.left * 2 + 12, pixel.top * 2 + titleBarHeight, 2, 2);
-				gr.setColor(p4);
-				gr.fillRect(pixel.left * 2 + 14, pixel.top * 2 + titleBarHeight, 2, 2);
 
 				Graphics2D g2 = (Graphics2D) getGraphics();
-				g2.drawImage(img, null, 0, 0);
+				// draw on the actual screen
+				drawPixels(g2, p1, p2, p3, p4, pixel);
+				// draw in the memory so the paint method can redraw everything
+				drawPixels(gr, p1, p2, p3, p4, pixel);
 
 				if (EmulatorMain.DEBUG) {
 					System.out.println("(" + (pixel.left + 0) + ", " + (pixel.top) + "): " + p1);
@@ -457,6 +544,26 @@ public class FBViewer extends JFrame {
 			}
 		}
 
+	}
+
+	private void drawPixels(Graphics2D gr, Color p1, Color p2, Color p3, Color p4, Insets pixel) {
+		gr.setColor(p1);
+		gr.fillRect(pixel.left * 2 + 8, pixel.top * 2 + titleBarHeight, 2, 2);
+		gr.setColor(p2);
+		gr.fillRect(pixel.left * 2 + 10, pixel.top * 2 + titleBarHeight, 2, 2);
+		gr.setColor(p3);
+		gr.fillRect(pixel.left * 2 + 12, pixel.top * 2 + titleBarHeight, 2, 2);
+		gr.setColor(p4);
+		gr.fillRect(pixel.left * 2 + 14, pixel.top * 2 + titleBarHeight, 2, 2);
+	}
+
+	private void drawChar(Graphics2D g2, int addr, int row, int col, int c) {
+		g2.setColor(this.backgroundColors[addr - Engine.VIDEO_OFFS]);
+		g2.fillRect(10 + col * 12, titleBarHeight - 5 + row * 12, 12, 13);
+
+		g2.setColor(this.foregroundColors[addr - Engine.VIDEO_OFFS]);
+		if (c != 32)
+			g2.drawString("" + String.format("%c", c), 10 + col * 12, titleBarHeight + 5 + row * 12);
 	}
 
 	private Insets getCoordinate(int addr) {
@@ -521,6 +628,14 @@ public class FBViewer extends JFrame {
 		memMdl.fireTableDataChanged();
 		this.backgroundColors = new Color[160 * 60];
 		this.foregroundColors = new Color[160 * 60];
+
+		Graphics g = getGraphics();
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+		gr.setColor(Color.BLACK);
+		gr.fillRect(0, 0, this.getWidth(), this.getHeight());
+
 		this.mode = TEXT_MODE;
 	}
 

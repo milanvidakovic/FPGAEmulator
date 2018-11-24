@@ -41,6 +41,7 @@ public class Engine {
 	}
 
 	public void reset() {
+		this.stop();
 		this.ctx.reset();
 		this.fbViewer.reset();
 		running = false;

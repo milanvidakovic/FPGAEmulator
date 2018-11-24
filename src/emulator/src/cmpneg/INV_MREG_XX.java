@@ -3,11 +3,11 @@ package emulator.src.cmpneg;
 import emulator.engine.CpuContext;
 import emulator.src.Instruction;
 
-public class NEG_MREG_XX extends Instruction {
-	public NEG_MREG_XX(short[] memory, int addr, int src, int dest) {
+public class INV_MREG_XX extends Instruction {
+	public INV_MREG_XX(short[] memory, int addr, int src, int dest) {
 		super(memory, addr, src, dest);
 		this.setArgument();
-		super.setAssembler("neg [" + this.sdest + " + 0x%04x]");
+		super.setAssembler("inv [" + this.sdest + " + 0x%04x]");
 	}
 
 	@Override

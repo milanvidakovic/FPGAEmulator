@@ -2,9 +2,7 @@ package emulator;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
@@ -13,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.swing.Box;
@@ -34,11 +34,12 @@ import emulator.memviewer.MemViewer;
 import emulator.src.Instruction;
 import emulator.src.NotImplementedException;
 import emulator.util.IniFile;
+import emulator.util.WindowUtil;
 
 public class EmulatorMain extends JFrame {
 	private static final long serialVersionUID = 5554754132655656443L;
-	
-	public static boolean DEBUG = false; 
+
+	public static boolean DEBUG = false;
 
 	final JFileChooser fc = new JFileChooser();
 
@@ -59,26 +60,24 @@ public class EmulatorMain extends JFrame {
 	 */
 	CpuContext ctx = new CpuContext();
 	/**
-	 * Execution engine. Capable of running in full speed,
-	 * stepping over and stepping into. supports breakpoints.
+	 * Execution engine. Capable of running in full speed, stepping over and
+	 * stepping into. supports breakpoints.
 	 */
 	Engine eng;
 	/**
-	 * Memory viewer. Content updated when instruction
-	 * writes something in the memory.
+	 * Memory viewer. Content updated when instruction writes something in the
+	 * memory.
 	 */
 	public MemViewer memViewer;
 	/**
-	 * The same memory viewer, but focused on the stack. 
-	 * Used to observe stack frame.
-	 * Content updated when instruction
-	 * writes something in the memory.
+	 * The same memory viewer, but focused on the stack. Used to observe stack
+	 * frame. Content updated when instruction writes something in the memory.
 	 */
 	public MemViewer sfViewer;
-	
+
 	public FBViewer fbViewer;
-	
-	public MouseListener popupListener; 
+
+	public MouseListener popupListener;
 
 	/**
 	 * Ini file wrapper. Configuration written and read from the ini file.
@@ -109,17 +108,17 @@ public class EmulatorMain extends JFrame {
 		tblSrc = new JTable(ctx.mdl);
 		src = new JScrollPane(tblSrc);
 		getContentPane().add(src, BorderLayout.CENTER);
-		
+
 		// popup menu
 		JPopupMenu popup = new JPopupMenu();
 		JMenuItem menuItem = new JMenuItem("Go to address");
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// If we choose the "Go to address" option from the 
+				// If we choose the "Go to address" option from the
 				// popup menu over some instruction
-				// this code will just go to that location 
-				// (won't set the break point) 
+				// this code will just go to that location
+				// (won't set the break point)
 				Instruction i = ctx.mdl.lines.get(tblSrc.getSelectedRow());
 				if (i != null) {
 					// get the argument of that instruction
@@ -129,7 +128,7 @@ public class EmulatorMain extends JFrame {
 					i = ctx.mdl.addr_instr[addr];
 					if (i != null) {
 						// if there is indeed an instruction
-						// obtain the row in the source table 
+						// obtain the row in the source table
 						int row = i.tableLine;
 						// select that row
 						tblSrc.setRowSelectionInterval(row, row);
@@ -161,7 +160,7 @@ public class EmulatorMain extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (chbDebug.isSelected())
 					EmulatorMain.DEBUG = true;
-				else 
+				else
 					EmulatorMain.DEBUG = false;
 			}
 		});
@@ -196,13 +195,19 @@ public class EmulatorMain extends JFrame {
 		});
 		btnReset.setToolTipText("Ctrl+R");
 		btnReset.setEnabled(false);
-		commands.add(Box.createHorizontalStrut(100));
+		commands.add(Box.createHorizontalStrut(10));
 		commands.add(btnExit);
 		btnExit.addActionListener(e -> {
-			saveSettings();
-			System.exit(0);
+			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		});
 		getContentPane().add(commands, BorderLayout.SOUTH);
+
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				saveSettings();
+			}
+		});
 
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
 			@Override
@@ -236,14 +241,12 @@ public class EmulatorMain extends JFrame {
 				return false;
 			}
 		});
+		WindowUtil.setLocation(ini.getInt("general", "x", 100), ini.getInt("general", "y", 100),
+				ini.getInt("general", "width", 800), ini.getInt("general", "height", 600), this);
 
-		setSize(new Dimension(ini.getInt("general", "width", 400), ini.getInt("general", "height", 700)));
-		setLocation(ini.getInt("general", "x", 1024), ini.getInt("general", "y", 0));
+		//pack();
+		FBViewer.titleBarHeight = 55;
 
-		pack();
-		Insets insets = this.getInsets();
-		FBViewer.titleBarHeight = insets.top + 10;
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
@@ -271,7 +274,7 @@ public class EmulatorMain extends JFrame {
 		ini.setInt("general", "height", getHeight());
 		ini.setInt("general", "x", getX());
 		ini.setInt("general", "y", getY());
-		ini.setInt("general", "debug", DEBUG?1:0);
+		ini.setInt("general", "debug", DEBUG ? 1 : 0);
 		ini.saveINI();
 	}
 
@@ -282,20 +285,23 @@ public class EmulatorMain extends JFrame {
 		fc.setFileFilter(new FileFilter() {
 			@Override
 			public boolean accept(File f) {
+				if (f.isDirectory()) return true;
 				if (f.getName().endsWith(".bin"))
 					return true;
 				return false;
 			}
+
 			@Override
 			public String getDescription() {
-				return null;
+				return "Binary executables";
 			}
 		});
 		fc.setCurrentDirectory(new File(ini.getString("general", "startDir", ".")));
 		int returnVal = fc.showOpenDialog(this);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			if (eng != null) eng.halt();
+			if (eng != null)
+				eng.halt();
 			setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			File file = fc.getSelectedFile();
 			ctx.load(file.getAbsolutePath());

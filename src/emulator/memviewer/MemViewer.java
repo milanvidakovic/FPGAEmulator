@@ -1,7 +1,6 @@
 package emulator.memviewer;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,6 +11,7 @@ import javax.swing.JTable;
 import emulator.EmulatorMain;
 import emulator.engine.CpuContext;
 import emulator.engine.Engine;
+import emulator.util.WindowUtil;
 
 /**
  * Memory viewer. Content updated when instruction
@@ -43,10 +43,8 @@ public class MemViewer extends JFrame {
 		pDisp.add(display);
 		getContentPane().add(pDisp, BorderLayout.SOUTH);
 
-		setSize(new Dimension(ctx.engine.main.ini.getInt(catName, "width", 400),
-				ctx.engine.main.ini.getInt(catName, "height", 700)));
-		setLocation(ctx.engine.main.ini.getInt(catName, "x", 1024),
-				ctx.engine.main.ini.getInt(catName, "y", 0));
+		WindowUtil.setLocation(ctx.engine.main.ini.getInt(catName, "x", 1024), ctx.engine.main.ini.getInt(catName, "y", 100), 
+				ctx.engine.main.ini.getInt(catName, "width", 400), ctx.engine.main.ini.getInt(catName, "height", 700), this);
 
 		setVisible(true);
 	}
